@@ -23,29 +23,31 @@ import java.net.URL;
     May be void.
     publishProgress(Progress...) not used here.
 */
-public class RetrieveDataTask extends AsyncTask<Activity, Void, String> {
+public class RetrieveDataTask extends AsyncTask<Activity, Void, JSONObject> {
 
     private Exception exception;
-    String data;
+    String text;
     Activity mainAct;
     TextView flavorTextView;
     TextView nameTextView;
+    TextView artistTextView;
     ImageView artView;
 
     protected void onPreExecute(){
-        data = "Loading";
+        text = "Loading";
     }
 
     //Params will be arg here
-    protected String doInBackground(Activity... act) {
+    protected JSONObject doInBackground(Activity... act) {
         mainAct = act[0];
-        flavorTextView = mainAct.findViewById(R.id.dataField);
+        flavorTextView = mainAct.findViewById(R.id.flavorText);
         nameTextView = mainAct.findViewById(R.id.cardName);
+        artistTextView = mainAct.findViewById(R.id.artist);
         artView = (ImageView)mainAct.findViewById(R.id.artCrop);
 
-        flavorTextView.setText(data);
+        flavorTextView.setText(text);
         try {
-            URL url = new URL("https://api.scryfall.com/cards/random?q=ft%3A%20");
+            URL url = new URL("https://api.scryfall.com/cards/random?q=ft%3A\"+\"");
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             try {
                 BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
@@ -55,9 +57,21 @@ public class RetrieveDataTask extends AsyncTask<Activity, Void, String> {
                     stringBuilder.append(line).append("\n");
                 }
                 br.close();
-                data = stringBuilder.toString();
-                formatResult(data);
-                return data; //this is Result
+
+                try{
+                    JSONObject card = new JSONObject(stringBuilder.toString());
+                    JSONObject images = card.getJSONObject("image_uris");
+
+                    formatImage(images.getString("art_crop"));
+                    return card; //this is Result
+                }
+                catch(JSONException j){
+                    flavorTextView.setText(j.toString()+"\n\n"+text);
+                    return null;
+                }
+
+
+
             } finally {
                 urlConnection.disconnect();
             }
@@ -68,13 +82,15 @@ public class RetrieveDataTask extends AsyncTask<Activity, Void, String> {
     }
 
     //Result will be arg here
-    protected void onPostExecute(String response){
+    protected void onPostExecute(JSONObject response){
+        String error = "";
         if(response == null){
-            response = "There was an error";
+            error = "There was an error";
         }
-        Log.i("INFO", response);
+        Log.i("INFO", error);
 
 
+        formatResult(response);
     }
     
     /*
@@ -82,31 +98,27 @@ public class RetrieveDataTask extends AsyncTask<Activity, Void, String> {
         Data is the full JSON object from scryfall.com.
         This method parses it into relevant parts.
      */
-    void formatResult(String data){
+    void formatResult(JSONObject card) {
         try {
-            JSONObject card = new JSONObject(data);
-            JSONObject images = card.getJSONObject("image_uris");
             nameTextView.setText(card.getString("name"));
             flavorTextView.setText(card.getString("flavor_text"));
+            artistTextView.setText(card.getString("artist"));
+        } catch (JSONException j) {
+            flavorTextView.setText(j.toString());
+        }
+    }
 
-            try{
-                if(images.has("art_crop")) {
-                    Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(images.getString("art_crop")).getContent());
-                    artView.setImageBitmap(bitmap);
-                }
-                else{
-                   Log.d("art","Couldnt find art_crop");
-                }
-            }
+    void formatImage(String url){
+        try{
+            Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(url).getContent());
+            artView.setImageBitmap(bitmap);
+        }
             catch (Exception i){
-                flavorTextView.setText(i.toString());
-            }
-
+            flavorTextView.setText(i.toString());
         }
-        catch(JSONException j){
-            flavorTextView.setText(j.toString()+"\n\n"+data);
-        }
-
 
     }
+
+
+
 }

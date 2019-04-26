@@ -32,6 +32,7 @@ public class RetrieveDataTask extends AsyncTask<Activity, Void, JSONObject> {
     TextView nameTextView;
     TextView artistTextView;
     ImageView artView;
+    ImageView cardView;
 
     protected void onPreExecute(){
         text = "Loading";
@@ -44,6 +45,7 @@ public class RetrieveDataTask extends AsyncTask<Activity, Void, JSONObject> {
         nameTextView = mainAct.findViewById(R.id.cardName);
         artistTextView = mainAct.findViewById(R.id.artist);
         artView = (ImageView)mainAct.findViewById(R.id.artCrop);
+        cardView = (ImageView)mainAct.findViewById(R.id.cardArt);
 
         flavorTextView.setText(text);
         try {
@@ -62,7 +64,9 @@ public class RetrieveDataTask extends AsyncTask<Activity, Void, JSONObject> {
                     JSONObject card = new JSONObject(stringBuilder.toString());
                     JSONObject images = card.getJSONObject("image_uris");
 
-                    formatImage(images.getString("art_crop"));
+                    formatImage(images.getString("art_crop"), artView);
+                    formatImage(images.getString("png"), cardView);
+
                     return card; //this is Result
                 }
                 catch(JSONException j){
@@ -98,23 +102,32 @@ public class RetrieveDataTask extends AsyncTask<Activity, Void, JSONObject> {
         Data is the full JSON object from scryfall.com.
         This method parses it into relevant parts.
      */
-    void formatResult(JSONObject card) {
-        try {
-            nameTextView.setText(card.getString("name"));
-            flavorTextView.setText(card.getString("flavor_text"));
-            artistTextView.setText(card.getString("artist"));
-        } catch (JSONException j) {
-            flavorTextView.setText(j.toString());
-        }
+    void formatResult(final JSONObject card) {
+        mainAct.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    nameTextView.setText(card.getString("name"));
+                    nameTextView.invalidate();
+                    flavorTextView.setText(card.getString("flavor_text"));
+                    flavorTextView.invalidate();
+                    artistTextView.setText("-"+card.getString("artist"));
+                    artistTextView.invalidate();
+                }
+                catch (JSONException j) {
+                    Log.e("Exception", j.toString());
+                }
+            }
+        });
     }
 
-    void formatImage(String url){
+    void formatImage(String url, ImageView view){
         try{
             Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(url).getContent());
-            artView.setImageBitmap(bitmap);
+            view.setImageBitmap(bitmap);
         }
             catch (Exception i){
-            flavorTextView.setText(i.toString());
+                Log.e("Exception", i.toString());
         }
 
     }

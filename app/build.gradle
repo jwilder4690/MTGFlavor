@@ -19,6 +19,13 @@ android {
 }
 
 dependencies {
+    def lifecycle_version = "2.0.0"
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+    //Optional - ReactiveStreams support for LiveDate
+    implementation "adroidx.lifecycle:lifecycle-reactivestream:$lifecycle_version"
+    //Optional - Test helpers for liveData
+    testImplementation "androidx.arch.core:core-testing:$lifecycle_version"
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'

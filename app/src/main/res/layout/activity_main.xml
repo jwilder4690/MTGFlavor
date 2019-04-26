@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
@@ -28,7 +29,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ScrollView
-        android:id="@+id/scrollView2"
+        android:id="@+id/scrollAll"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
@@ -66,7 +67,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
+                android:background="@color/borderColor"
                 android:contentDescription="@string/cardInfo1"
+                android:padding="5dp"
                 android:scaleType="fitCenter"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -77,30 +80,49 @@
                 tools:layout_editor_absoluteX="8dp"
                 tools:layout_editor_absoluteY="88dp" />
 
-            <TextView
-                android:id="@+id/artist"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/border"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/artist"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:layout_conversion_absoluteHeight="19dp"
+                    tools:layout_conversion_absoluteWidth="59dp"
+                    tools:layout_editor_absoluteX="8dp"
+                    tools:layout_editor_absoluteY="295dp" />
+
+                <TextView
+                    android:id="@+id/flavorText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/artCrop"
+                    tools:layout_conversion_absoluteHeight="19dp"
+                    tools:layout_conversion_absoluteWidth="363dp"
+                    tools:layout_editor_absoluteX="24dp"
+                    tools:layout_editor_absoluteY="330dp" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/cardArt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="end"
-                android:text="TextView"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/cardInfo1"
+                android:scaleType="fitCenter"
                 app:layout_constraintEnd_toEndOf="parent"
-                tools:layout_conversion_absoluteHeight="19dp"
-                tools:layout_conversion_absoluteWidth="59dp"
-                tools:layout_editor_absoluteX="8dp"
-                tools:layout_editor_absoluteY="295dp" />
-
-            <TextView
-                android:id="@+id/flavorText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/artCrop"
-                tools:layout_conversion_absoluteHeight="19dp"
-                tools:layout_conversion_absoluteWidth="363dp"
-                tools:layout_editor_absoluteX="24dp"
-                tools:layout_editor_absoluteY="330dp" />
+                app:srcCompat="@drawable/omniscience_card"
+                tools:layout_editor_absoluteY="413dp" />
 
         </LinearLayout>
     </ScrollView>

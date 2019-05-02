@@ -1,21 +1,34 @@
 package com.example.mtgflavorsampler;
 
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
+
+import androidx.lifecycle.ViewModel;
 
 public class FlavorViewModel extends ViewModel {
-    //Example: but I don't have users
-    //private MutableLiveData<Card> card;
+    private LiveData<Card> currentCard;
+    private CardRepository cardRepo;
+    String cardId;
 
-//    public LiveData<Card> getCard(){
-//        if (card == null){
-//            card = new MutableLiveData<Card>();
-//            loadCard();
-//        }
-//        return card;
-//    }
-//
-//    private void loadUsers(){
-//
-//    }
+
+
+    public void init(int id){
+        if(this.currentCard != null){
+            return;
+        }
+        currentCard = new MutableLiveData<Card>();
+                = cardRepo.fetchCard();
+    }
+
+
+    public LiveData<Card> getCard(){
+        if (currentCard == null){
+            currentCard = new MutableLiveData<Card>();
+            cardRepo.loadCard();
+        }
+        return currentCard;
+    }
+
+
 }

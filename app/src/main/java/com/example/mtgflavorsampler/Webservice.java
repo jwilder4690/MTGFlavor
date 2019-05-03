@@ -8,7 +8,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class Webservice {
-    public Card loadCard(){
+    public CardData loadCard(){
         try {
             URL url = new URL("https://api.scryfall.com/cards/random?q=ft%3A\"+\"");
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -21,7 +21,7 @@ public class Webservice {
                 }
                 br.close();
 
-                return new Card(stringBuilder.toString());
+                return new CardData(stringBuilder.toString());
 
 
             } finally {
@@ -30,6 +30,7 @@ public class Webservice {
         } catch (Exception e) {
             Log.e("Error", e.getMessage(), e);
         }
-        return new Card();
+        //need some kind of handling for this situation
+        return new CardData("");
     }
 }

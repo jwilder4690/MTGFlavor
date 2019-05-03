@@ -1,9 +1,12 @@
 package com.example.mtgflavorsampler;
 
 import android.content.Context;
+import android.os.AsyncTask;
+
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 @Database(entities = {CardData.class}, version = 1)
 public abstract class CardDatabase extends RoomDatabase {
@@ -17,8 +20,30 @@ public abstract class CardDatabase extends RoomDatabase {
             instance = Room.databaseBuilder(context.getApplicationContext(),
                     CardDatabase.class, "card_database")
                     .fallbackToDestructiveMigration()
+                    .addCallback(roomCallback)
                     .build();
         }
         return instance;
+    }
+
+    private static RoomDatabase.Callback roomCallback = new RoomDatabase.Callback(){
+        @Override
+        public void onCreate(SupportSQLiteDatabase db){
+            super.onCreate(db);
+        }
+    };
+
+    private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void> {
+        private CardDao cardDao;
+
+        private PopulateDbAsyncTask(CardDatabase db){
+            cardDao = db.cardDao();
+        }
+        @Override
+        protected Void doInBackground(Void... voids){
+            //Do manual insert of Angelheart Vial or Omniscience
+            //cardDao.insert(new CardData("CardName", "I am a cool card", "me", "www.com", "www.com", 1));
+            return null;
+        }
     }
 }

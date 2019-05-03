@@ -1,5 +1,10 @@
 package com.example.mtgflavorsampler;
 
+import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -9,21 +14,31 @@ public class CardData {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
+    private JSONObject cardJSON;
     private String name;
     private String flavorText;
     private String artist;
     private String artCropUrl;
     private String cardArtUrl;
-    private int favorite;
+    private int favorite; //use later for ordering your faves
 
 
-    public CardData(String name, String flavorText, String artist, String artCropUrl, String cardArtUrl, int favorite) {
-        this.name = name;
-        this.flavorText = flavorText;
-        this.artist = artist;
-        this.artCropUrl = artCropUrl;
-        this.cardArtUrl = cardArtUrl;
-        this.favorite = favorite;
+
+    public CardData(String webCard){
+        try{
+            cardJSON = new JSONObject(webCard);
+            name = cardJSON.getString("name");
+            flavorText = cardJSON.getString("flavor_text");
+            artist = cardJSON.getString("artist");
+
+            JSONObject images = cardJSON.getJSONObject("image_uris");
+
+            artCropUrl = images.getString("art_crop");
+            cardArtUrl = images.getString("png");
+        }
+        catch (JSONException j) {
+            Log.e("Exception", j.toString());
+        }
     }
 
     public void setId(int id) {

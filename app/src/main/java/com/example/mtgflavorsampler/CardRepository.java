@@ -1,38 +1,94 @@
 package com.example.mtgflavorsampler;
 
-import javax.security.auth.callback.Callback;
+import android.app.Application;
+import android.os.AsyncTask;
 
+import java.util.List;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
+
 
 public class CardRepository {
+    private CardDao cardDao;
+    private LiveData<List<CardData>> allCards;
+    private CardData currentCard;
     private Webservice webservice;
-    private Card loadedCard;
 
-    public Card fetchCard(){
-        if(loadedCard != null){
-            return loadedCard;
-        }
-        else{
-            loadedCard = loadCard();
-            return loadedCard;
-        }
+    public CardRepository(Application application){
+        CardDatabase database = CardDatabase.getInstance(application);
+        cardDao = database.cardDao();
+        allCards = cardDao.getAllCards();
     }
 
-    public void loadNewCard(){
-        loadedCard = webservice.loadCard();
+    public void insert(CardData card){
+        new InsertCardAsyncTask(cardDao).execute(card);
     }
 
-    private Card loadCard(){
-        return webservice.loadCard();
+    public void update(CardData card){
+        new UpdateCardAsyncTask(cardDao).execute(card);
     }
 
-//    public LiveData<Card> getCard(int cardId){
-//        final MutableLiveData<Card> data = new MutableLiveData<>();
-//        webservice.getCard(cardId).enqueue(new Callback<Card>(){
-//            public void onResponse(Call<Card> call, Response<Card> response){
-//                data.setValue(response.body());
-//            }
-//        });
+    public void delete(CardData card){
+        new DeleteCardAsyncTask(cardDao).execute(card);
+    }
+
+    public LiveData<List<CardData>> getAllCards(){
+        return allCards;
+    }
+
+    public CardData getCurrentCard(){
+        //TODO: figure out what to do if null. Need to use temp until new card is fetched
+        return currentCard;
+    }
+
+    /*
+        TODO: OnCreate, Fetch a card from the web and make it your current card.
+        TODO: On request Fetch a new card from the web and replace current card.
+        Possibly insert will be used to add current card to database.
+     */
+
+//    public void fetchCard(){
+//        currentCard = webservice.loadCard();
 //    }
+
+    private static class InsertCardAsyncTask extends AsyncTask<CardData, Void, Void>{
+        private CardDao cardDao;
+
+        private InsertCardAsyncTask(CardDao cardDao){
+            this.cardDao = cardDao;
+        }
+
+        @Override
+        protected Void doInBackground(CardData ... cards){
+            cardDao.insert(cards[0]);
+            return null;
+        }
+    }
+
+    private static class UpdateCardAsyncTask extends AsyncTask<CardData, Void, Void>{
+        private CardDao cardDao;
+
+        private UpdateCardAsyncTask(CardDao cardDao){
+            this.cardDao = cardDao;
+        }
+
+        @Override
+        protected Void doInBackground(CardData ... cards){
+            cardDao.update(cards[0]);
+            return null;
+        }
+    }
+
+    private static class DeleteCardAsyncTask extends AsyncTask<CardData, Void, Void>{
+        private CardDao cardDao;
+
+        private DeleteCardAsyncTask(CardDao cardDao){
+            this.cardDao = cardDao;
+        }
+
+        @Override
+        protected Void doInBackground(CardData ... cards){
+            cardDao.delete(cards[0]);
+            return null;
+        }
+    }
 }

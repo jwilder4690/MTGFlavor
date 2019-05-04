@@ -8,6 +8,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class Webservice {
+    //Does this need to be the AsyncTask or can I just call it from an AsyncTask?
     public CardData loadCard(){
         try {
             URL url = new URL("https://api.scryfall.com/cards/random?q=ft%3A\"+\"");
@@ -30,7 +31,7 @@ public class Webservice {
         } catch (Exception e) {
             Log.e("Error", e.getMessage(), e);
         }
-        //need some kind of handling for this situation
+        //TODO: need some kind of handling for this situation
         return new CardData("");
     }
 }

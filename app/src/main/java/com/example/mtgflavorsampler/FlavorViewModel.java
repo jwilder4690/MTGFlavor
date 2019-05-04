@@ -1,34 +1,32 @@
 package com.example.mtgflavorsampler;
 
+import android.app.Application;
+
+import java.util.List;
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 
-import androidx.lifecycle.ViewModel;
+public class FlavorViewModel extends AndroidViewModel{
+    private  CardRepository repository;
+    private LiveData<List<CardData>> favoriteCards;
 
-public class FlavorViewModel extends ViewModel {
-    private LiveData<Card> currentCard;
-    private CardRepository cardRepo;
-    String cardId;
-
-
-
-    public void init(int id){
-        if(this.currentCard != null){
-            return;
-        }
-        currentCard = new MutableLiveData<Card>();
-                = cardRepo.fetchCard();
+    public FlavorViewModel(@NonNull Application application) {
+        super(application);
+        repository = new CardRepository(application);
+        favoriteCards = repository.getAllCards();
     }
 
-
-    public LiveData<Card> getCard(){
-        if (currentCard == null){
-            currentCard = new MutableLiveData<Card>();
-            cardRepo.loadCard();
-        }
-        return currentCard;
+    public void insert(CardData card){
+        repository.insert(card);
     }
 
+    public void delete(CardData card){
+        repository.delete(card);
+    }
 
+    public LiveData<List<CardData>> getFavoriteCards() {
+        return favoriteCards;
+    }
 }

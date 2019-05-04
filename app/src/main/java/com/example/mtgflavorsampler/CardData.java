@@ -14,7 +14,6 @@ public class CardData {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
-    private JSONObject cardJSON;
     private String name;
     private String flavorText;
     private String artist;
@@ -26,7 +25,7 @@ public class CardData {
 
     public CardData(String webCard){
         try{
-            cardJSON = new JSONObject(webCard);
+            JSONObject cardJSON = new JSONObject(webCard);
             name = cardJSON.getString("name");
             flavorText = cardJSON.getString("flavor_text");
             artist = cardJSON.getString("artist");
@@ -39,6 +38,15 @@ public class CardData {
         catch (JSONException j) {
             Log.e("Exception", j.toString());
         }
+    }
+
+    public CardData(String name, String flavorText, String artist, String artCropUrl, String cardArtUrl, int favorite) {
+        this.name = name;
+        this.flavorText = flavorText;
+        this.artist = artist;
+        this.artCropUrl = artCropUrl;
+        this.cardArtUrl = cardArtUrl;
+        this.favorite = favorite;
     }
 
     public void setId(int id) {

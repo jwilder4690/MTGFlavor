@@ -6,6 +6,11 @@ import android.os.AsyncTask;
 import java.util.List;
 import androidx.lifecycle.LiveData;
 
+/*
+    This class utilizes AsyncTasks<Params, Progress, Result> in order to handle operations that will
+    not be instantaneous (Interacting with the web or our database). This prevents our UI from hanging
+    or crashing while we fetch items.
+ */
 
 public class CardRepository {
     private CardDao cardDao;
@@ -36,19 +41,43 @@ public class CardRepository {
     }
 
     public CardData getCurrentCard(){
-        //TODO: figure out what to do if null. Need to use temp until new card is fetched
+        //TODO: figure out what to do if null, as AsyncTask may not be complete yet.
+        // Need to use temp until new card is fetched
+        if(currentCard == null){
+            fetchCard();
+        }
         return currentCard;
     }
 
     /*
         TODO: OnCreate, Fetch a card from the web and make it your current card.
-        TODO: On request Fetch a new card from the web and replace current card.
+        TODO: On request (button) Fetch a new card from the web and replace current card.
         Possibly insert will be used to add current card to database.
      */
 
-//    public void fetchCard(){
-//        currentCard = webservice.loadCard();
-//    }
+    public void fetchCard(){
+        // This will fetch a new card from the web and update current card.
+        new FetchCardAsyncTask(currentCard).execute(webservice);
+    }
+
+    private static class FetchCardAsyncTask extends AsyncTask<Webservice, Void, CardData>{
+        //better to make taskCard public or do it this way? Maybe protected? IDK
+        private CardData taskCard;
+
+        private  FetchCardAsyncTask(CardData taskCard){
+            taskCard = taskCard;
+        }
+
+        @Override
+        protected CardData doInBackground(Webservice... webs){
+            return webs[0].loadCard();
+        }
+
+        @Override
+        protected void onPostExecute(CardData result){
+            taskCard = result;
+        }
+    }
 
     private static class InsertCardAsyncTask extends AsyncTask<CardData, Void, Void>{
         private CardDao cardDao;

@@ -1,6 +1,7 @@
 package com.example.mtgflavorsampler;
 
 import android.app.Application;
+import android.util.Log;
 
 import java.util.List;
 import androidx.annotation.NonNull;
@@ -16,6 +17,10 @@ public class FlavorViewModel extends AndroidViewModel{
         super(application);
         repository = new CardRepository(application);
         favoriteCards = repository.getAllCards();
+    }
+
+    public CardData viewCard(){
+        return repository.getCurrentCard();
     }
 
     public void insert(CardData card){

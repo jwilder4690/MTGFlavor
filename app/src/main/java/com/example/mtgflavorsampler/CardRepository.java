@@ -2,6 +2,7 @@ package com.example.mtgflavorsampler;
 
 import android.app.Application;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.util.List;
 import androidx.lifecycle.LiveData;
@@ -37,6 +38,7 @@ public class CardRepository {
     }
 
     public LiveData<List<CardData>> getAllCards(){
+        Log.i("DEBUG", "I am in repo");
         return allCards;
     }
 

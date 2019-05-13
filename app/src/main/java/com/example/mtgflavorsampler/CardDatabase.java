@@ -2,6 +2,7 @@ package com.example.mtgflavorsampler;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.room.Database;
 import androidx.room.Room;
@@ -30,6 +31,8 @@ public abstract class CardDatabase extends RoomDatabase {
         @Override
         public void onCreate(SupportSQLiteDatabase db){
             super.onCreate(db);
+            new PopulateDbAsyncTask(instance).execute();
+            Log.i("DEBUG", "Callback called");
         }
     };
 
@@ -42,7 +45,7 @@ public abstract class CardDatabase extends RoomDatabase {
         @Override
         protected Void doInBackground(Void... voids){
             //Do manual insert of Angelheart Vial or Omniscience
-            //cardDao.insert(new CardData("CardName", "I am a cool card", "me", "www.com", "www.com", 1));
+            cardDao.insert(new CardData("CardName", "I am a cool card", "me", "www.com", "www.com", 1));
             return null;
         }
     }

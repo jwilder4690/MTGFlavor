@@ -12,15 +12,21 @@ import androidx.lifecycle.LiveData;
 public class FlavorViewModel extends AndroidViewModel{
     private  CardRepository repository;
     private LiveData<List<CardData>> favoriteCards;
+    private LiveData<CardData> currentCard;
 
     public FlavorViewModel(@NonNull Application application) {
         super(application);
         repository = new CardRepository(application);
         favoriteCards = repository.getAllCards();
+        currentCard = repository.getCurrentCard();
     }
 
-    public CardData viewCard(){
-        return repository.getCurrentCard();
+    public LiveData<CardData> viewCard(){
+        return currentCard;
+    }
+
+    public void requestNewCard(){
+        repository.fetchCard();
     }
 
     public void insert(CardData card){

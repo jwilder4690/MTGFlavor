@@ -7,7 +7,7 @@
     >
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/text_view_activity_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/flavorButton"
+        android:id="@+id/button_flavor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -37,10 +37,10 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/flavorButton"
+        app:layout_constraintBottom_toTopOf="@+id/button_flavor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2">
+        app:layout_constraintTop_toBottomOf="@+id/text_view_activity_title">
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -49,20 +49,20 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/cardName"
+                android:id="@+id/text_view_card_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView2"
+                app:layout_constraintTop_toBottomOf="@+id/text_view_activity_title"
                 tools:layout_conversion_absoluteHeight="24dp"
                 tools:layout_conversion_absoluteWidth="0dp"
                 tools:layout_editor_absoluteX="16dp"
                 tools:layout_editor_absoluteY="56dp" />
 
             <ImageView
-                android:id="@+id/artCrop"
+                android:id="@+id/image_view_art_crop"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
@@ -72,7 +72,7 @@
                 android:scaleType="fitCenter"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardName"
+                app:layout_constraintTop_toBottomOf="@+id/text_view_card_name"
                 app:srcCompat="@drawable/omniscience"
                 tools:layout_conversion_absoluteHeight="207dp"
                 tools:layout_conversion_absoluteWidth="395dp"
@@ -104,7 +104,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/artCrop"
+                    app:layout_constraintTop_toBottomOf="@+id/image_view_art_crop"
                     tools:layout_conversion_absoluteHeight="19dp"
                     tools:layout_conversion_absoluteWidth="363dp"
                     tools:layout_editor_absoluteX="24dp"

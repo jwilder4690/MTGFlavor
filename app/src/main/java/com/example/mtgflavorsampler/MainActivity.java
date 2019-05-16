@@ -56,8 +56,8 @@ public class MainActivity extends AppCompatActivity{
                 nameView.setText(card.getName());
                 flavorView.setText(card.getFlavorText());
                 artistView.setText(card.getArtist());
-                artCropView.setImageBitmap(card.getArtCrop());
-                cardArtView.setImageBitmap(card.getCardArt());
+                artCropView.setImageBitmap(flavorViewModel.getCurrentArtCrop());
+                cardArtView.setImageBitmap(flavorViewModel.getCurrentCardArt());
             }
         });
     }

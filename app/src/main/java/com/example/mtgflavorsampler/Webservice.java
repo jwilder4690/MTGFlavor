@@ -30,10 +30,7 @@ public class Webservice {
                     stringBuilder.append(line).append("\n");
                 }
                 br.close();
-
-                CardData newCard = new CardData(stringBuilder.toString());
-                setBitmaps(newCard);
-                return newCard;
+                return new CardData(stringBuilder.toString());
 
 
             } finally {
@@ -46,18 +43,18 @@ public class Webservice {
         return new CardData("");
     }
 
-    private void setBitmaps(CardData card){
-        try{
-            Bitmap bitmapArtCrop = BitmapFactory.decodeStream((InputStream) new URL(card.getArtCropUrl()).getContent());
-            Bitmap bitmapCardArt = BitmapFactory.decodeStream((InputStream) new URL(card.getCardArtUrl()).getContent());
-            card.setArtCrop(bitmapArtCrop);
-            card.setCardArt(bitmapCardArt);
-        }
-        catch (MalformedURLException e){
-            Log.e("EXCEPTION", "Invalid url provided by api.");
-        }
-        catch (IOException i){
-            Log.e("EXCEPTION", "IO failed.");
-        }
-    }
+//    private void setBitmaps(CardData card){
+//        try{
+//            Bitmap bitmapArtCrop = BitmapFactory.decodeStream((InputStream) new URL(card.getArtCropUrl()).getContent());
+//            Bitmap bitmapCardArt = BitmapFactory.decodeStream((InputStream) new URL(card.getCardArtUrl()).getContent());
+//            card.setArtCrop(bitmapArtCrop);
+//            card.setCardArt(bitmapCardArt);
+//        }
+//        catch (MalformedURLException e){
+//            Log.e("EXCEPTION", "Invalid url provided by api.");
+//        }
+//        catch (IOException i){
+//            Log.e("EXCEPTION", "IO failed.");
+//        }
+//    }
 }

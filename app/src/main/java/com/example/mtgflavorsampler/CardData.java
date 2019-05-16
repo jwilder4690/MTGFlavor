@@ -21,9 +21,6 @@ public class CardData {
     private String artCropUrl;
     private String cardArtUrl;
     private int favorite; //use later for ordering your faves
-    private Bitmap artCrop;
-    private Bitmap cardArt;
-
 
     public CardData(String webCard){
         try{
@@ -55,15 +52,6 @@ public class CardData {
         this.id = id;
     }
 
-
-    public void setArtCrop(Bitmap art){
-        artCrop = art;
-    }
-
-    public void setCardArt(Bitmap art){
-        cardArt = art;
-    }
-
     public int getId() {
         return id;
     }
@@ -91,13 +79,4 @@ public class CardData {
     public int getFavorite() {
         return favorite;
     }
-
-    public Bitmap getArtCrop() {
-        return artCrop;
-    }
-
-    public Bitmap getCardArt() {
-        return cardArt;
-    }
-
 }

@@ -1,9 +1,14 @@
 package com.example.mtgflavorsampler;
 
 import android.app.Application;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -18,12 +23,15 @@ public class CardRepository {
     private CardDao cardDao;
     private LiveData<List<CardData>> allCards;
     private MutableLiveData<CardData> currentCard = new MutableLiveData<>();
+    public MutableLiveData<Bitmap> currentArtCrop = new MutableLiveData<>();
+    public MutableLiveData<Bitmap> currentCardArt = new MutableLiveData<>();
 
     public CardRepository(Application application){
         CardDatabase database = CardDatabase.getInstance(application);
         cardDao = database.cardDao();
         allCards = cardDao.getAllCards();
         currentCard.setValue(new CardData("CardName", "I am a cool card", "me", "www.com", "www.com", 1));
+        fetchCard();
     }
 
     public void insert(CardData card){
@@ -42,6 +50,14 @@ public class CardRepository {
     public LiveData<List<CardData>> getAllCards(){
         Log.i("DEBUG", "I am in repo");
         return allCards;
+    }
+
+    public LiveData<Bitmap> getCurrentArtCrop(){
+        return currentArtCrop;
+    }
+
+    public MutableLiveData<Bitmap> getCurrentCardArt() {
+        return currentCardArt;
     }
 
     public LiveData<CardData> getCurrentCard(){
@@ -80,7 +96,20 @@ public class CardRepository {
 
         @Override
         protected CardData doInBackground(Void... voids){
-            return webservice.loadCard();
+            CardData loadedCard = webservice.loadCard();
+            try{
+                InputStream in = (InputStream) new URL(loadedCard.getArtCropUrl()).getContent();
+                repository.currentArtCrop.postValue(BitmapFactory.decodeStream(in));
+                in = (InputStream) new URL(loadedCard.getCardArtUrl()).getContent();
+                repository.currentCardArt.postValue(BitmapFactory.decodeStream(in));
+            }
+            catch (MalformedURLException e){
+                Log.e("ERROR", "Bad URL from API.");
+            }
+            catch (Exception e){
+
+            }
+            return loadedCard;
         }
 
         @Override

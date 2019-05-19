@@ -34,8 +34,8 @@ public class CardRepository {
         fetchCard();
     }
 
-    public void insert(CardData card){
-        new InsertCardAsyncTask(cardDao).execute(card);
+    public void insert(){
+        new InsertCardAsyncTask(cardDao).execute(currentCard.getValue());
     }
 
     //Keep, may be used to update priority

@@ -9,6 +9,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
@@ -20,7 +21,7 @@ android {
 
 dependencies {
     def lifecycle_version = "2.0.0"
-    def room_version =  "2.1.0-alpha07"
+    def room_version = "2.1.0-alpha07"
     def card_version = "1.0.0"
 
 

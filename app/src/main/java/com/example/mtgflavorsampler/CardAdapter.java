@@ -39,6 +39,10 @@ public class CardAdapter extends RecyclerView.Adapter <CardAdapter.CardHolder> {
         notifyDataSetChanged();
     }
 
+    public CardData getCardAt(int position){
+        return cards.get(position);
+    }
+
     class CardHolder extends RecyclerView.ViewHolder{
         private TextView textViewName;
         private TextView textViewFlavorText;

@@ -2,18 +2,16 @@ package com.example.mtgflavorsampler;
 
 import androidx.lifecycle.Observer;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
@@ -26,22 +24,6 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //This is the code for Faves list, may not ultimately go in main activity
-        /*
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager((this)));
-        recyclerView.setHasFixedSize(true);
-
-        final CardAdapter adapter = new CardAdapter();
-        recyclerView.setAdapter(adapter);
-        flavorViewModel.getFavoriteCards().observe(this, new Observer<List<CardData>>() {
-            @Override
-            public void onChanged(List<CardData> favoriteCards) {
-                adapter.setCards(favoriteCards);
-            }
-        });
-        */
 
         final TextView nameView = findViewById(R.id.text_view_card_name);
         final TextView flavorView = findViewById(R.id.text_view_flavor);
@@ -70,7 +52,28 @@ public class MainActivity extends AppCompatActivity{
         flavorViewModel.requestNewCard();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.list_favorites, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch(item.getItemId()){
+            case R.id.list_favorites:
+                Intent intent = new Intent( MainActivity.this, DisplayFavoritesActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.add_to_favorites:
+                flavorViewModel.insert();
+                Toast.makeText(MainActivity.this, "Added to favorites", Toast.LENGTH_SHORT).show();
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }
+
 
 

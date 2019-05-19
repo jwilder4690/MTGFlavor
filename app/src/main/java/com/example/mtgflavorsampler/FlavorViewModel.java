@@ -43,8 +43,8 @@ public class FlavorViewModel extends AndroidViewModel{
         repository.fetchCard();
     }
 
-    public void insert(CardData card){
-        repository.insert(card);
+    public void insert(){
+        repository.insert();
     }
 
     public void delete(CardData card){

@@ -20,7 +20,7 @@ public interface CardDao {
     @Delete
     void delete(CardData card);
 
-    @Query("SELECT * FROM card_table ORDER BY favorite DESC")
+    @Query("SELECT * FROM card_table ORDER BY id DESC")
     LiveData<List<CardData>> getAllCards();
     //can use SQL operations
 }

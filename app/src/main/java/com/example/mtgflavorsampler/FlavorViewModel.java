@@ -51,6 +51,10 @@ public class FlavorViewModel extends AndroidViewModel{
         repository.delete(card);
     }
 
+    public void swap(int start, int end){
+        repository.swap(start, end);
+    }
+
     public LiveData<List<CardData>> getFavoriteCards() {
         return favoriteCards;
     }

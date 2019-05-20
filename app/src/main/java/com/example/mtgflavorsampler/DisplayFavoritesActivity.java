@@ -54,11 +54,19 @@ public class DisplayFavoritesActivity extends AppCompatActivity {
             }
         });
 
-        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN,
                 ItemTouchHelper.RIGHT ) {
             @Override
+            public boolean isItemViewSwipeEnabled(){
+                return true;
+            }
+
+            @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                return false;
+                //both needed? TODO: Current list creation sorts by priority, so we need to not change the order back each time
+                flavorViewModel.swap(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                adapter.swapItems(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                return true;
             }
 
             @Override

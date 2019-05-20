@@ -39,13 +39,12 @@ public class CardData {
         }
     }
 
-    public CardData(String name, String flavorText, String artist, String artCropUrl, String cardArtUrl, int favorite) {
+    public CardData(String name, String flavorText, String artist, String artCropUrl, String cardArtUrl) {
         this.name = name;
         this.flavorText = flavorText;
         this.artist = artist;
         this.artCropUrl = artCropUrl;
         this.cardArtUrl = cardArtUrl;
-        this.favorite = favorite;
     }
 
     public void setId(int id) {
@@ -78,5 +77,9 @@ public class CardData {
 
     public int getFavorite() {
         return favorite;
+    }
+
+    public void setFavorite(int change){
+        favorite = change;
     }
 }

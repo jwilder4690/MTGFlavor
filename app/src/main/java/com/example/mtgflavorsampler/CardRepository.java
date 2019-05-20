@@ -30,7 +30,7 @@ public class CardRepository {
         CardDatabase database = CardDatabase.getInstance(application);
         cardDao = database.cardDao();
         allCards = cardDao.getAllCards();
-        currentCard.setValue(new CardData("CardName", "I am a cool card", "me", "www.com", "www.com", 1));
+        currentCard.setValue(new CardData("CardName", "I am a cool card", "me", "www.com", "www.com"));
         fetchCard();
     }
 
@@ -38,6 +38,11 @@ public class CardRepository {
         new InsertCardAsyncTask(cardDao).execute(currentCard.getValue());
     }
 
+    public void swap(int start, int end){
+        int temp = allCards.getValue().get(end).getId();
+        allCards.getValue().get(end).setId(allCards.getValue().get(start).getId());
+        allCards.getValue().get(start).setId(temp);
+    }
     //Keep, may be used to update priority
     public void update(CardData card){
         new UpdateCardAsyncTask(cardDao).execute(card);

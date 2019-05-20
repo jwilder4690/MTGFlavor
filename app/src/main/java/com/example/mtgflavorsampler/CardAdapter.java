@@ -26,12 +26,18 @@ public class CardAdapter extends RecyclerView.Adapter <CardAdapter.CardHolder> {
         CardData currentCard = cards.get(position);
         holder.textViewName.setText(currentCard.getName());
         holder.textViewFlavorText.setText(currentCard.getFlavorText());
-        holder.textViewPriority.setText(String.valueOf(currentCard.getFavorite()));
     }
 
     @Override
     public int getItemCount() {
         return cards.size();
+    }
+
+    public void swapItems(int oldPosition, int newPosition){
+        CardData temp = cards.get(newPosition);
+        cards.set(newPosition, cards.get(oldPosition));
+        cards.set(oldPosition, temp);
+        notifyItemMoved(oldPosition, newPosition);
     }
 
     public void setCards(List<CardData> cards){
@@ -46,13 +52,11 @@ public class CardAdapter extends RecyclerView.Adapter <CardAdapter.CardHolder> {
     class CardHolder extends RecyclerView.ViewHolder{
         private TextView textViewName;
         private TextView textViewFlavorText;
-        private TextView textViewPriority;
 
         public CardHolder(@NonNull View itemView) {
             super(itemView);
             textViewName = itemView.findViewById(R.id.text_view_cardName);
             textViewFlavorText = itemView.findViewById(R.id.text_view_flavorText);
-            textViewPriority = itemView.findViewById(R.id.text_view_priority);
         }
     }
 }

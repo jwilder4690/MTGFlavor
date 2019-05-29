@@ -9,6 +9,7 @@ import android.util.Log;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -22,6 +23,7 @@ import androidx.lifecycle.MutableLiveData;
 public class CardRepository {
     private CardDao cardDao;
     private LiveData<List<CardData>> allCards;
+    private List<CardData> currentList = new ArrayList<>(); //temp
     private MutableLiveData<CardData> currentCard = new MutableLiveData<>();
     public MutableLiveData<Bitmap> currentArtCrop = new MutableLiveData<>();
     public MutableLiveData<Bitmap> currentCardArt = new MutableLiveData<>();
@@ -31,17 +33,20 @@ public class CardRepository {
         cardDao = database.cardDao();
         allCards = cardDao.getAllCards();
         currentCard.setValue(new CardData("CardName", "I am a cool card", "me", "www.com", "www.com"));
+        fetchList();
         fetchCard();
     }
 
     public void insert(){
         new InsertCardAsyncTask(cardDao).execute(currentCard.getValue());
+        fetchList();
     }
 
     public void swap(int start, int end){
         int temp = allCards.getValue().get(end).getId();
         allCards.getValue().get(end).setId(allCards.getValue().get(start).getId());
         allCards.getValue().get(start).setId(temp);
+        fetchList();
     }
     //Keep, may be used to update priority
     public void update(CardData card){
@@ -50,11 +55,25 @@ public class CardRepository {
 
     public void delete(CardData card){
         new DeleteCardAsyncTask(cardDao).execute(card);
+        fetchList();
     }
 
+    //Use for Live Data
     public LiveData<List<CardData>> getAllCards(){
         Log.i("DEBUG", "I am in repo");
         return allCards;
+    }
+    //Use for immediate Data
+    public List<CardData> getList(){
+        return currentList;
+    }
+
+    public void setList(List<CardData> inList){
+        currentList = inList;
+    }
+
+    public void fetchList(){
+        new GetListAsyncTask(cardDao, this).execute();
     }
 
     public LiveData<Bitmap> getCurrentArtCrop(){
@@ -135,6 +154,26 @@ public class CardRepository {
         protected Void doInBackground(CardData ... cards){
             cardDao.insert(cards[0]);
             return null;
+        }
+    }
+
+    private static class GetListAsyncTask extends AsyncTask<Void, Void, List<CardData>>{
+        private CardRepository repository;
+        private CardDao cardDao;
+
+        private GetListAsyncTask(CardDao cardDao, CardRepository repository){
+            this.cardDao = cardDao;
+            this.repository = repository;
+        }
+
+        @Override
+        protected List<CardData> doInBackground(Void... voids){
+            return cardDao.getList();
+        }
+
+        @Override
+        protected void onPostExecute(List<CardData> result){
+            this.repository.setList(result);
         }
     }
 

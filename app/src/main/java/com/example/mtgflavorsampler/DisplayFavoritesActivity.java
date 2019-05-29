@@ -1,21 +1,27 @@
 package com.example.mtgflavorsampler;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.lifecycle.Observer;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
-
+import android.view.LayoutInflater;
 import java.util.List;
 
+
+/*
+    This activity has been replaced by Fragment, but is still here for reference
+ */
 public class DisplayFavoritesActivity extends AppCompatActivity {
     private FlavorViewModel flavorViewModel;
 
@@ -75,6 +81,14 @@ public class DisplayFavoritesActivity extends AppCompatActivity {
                 Toast.makeText(DisplayFavoritesActivity.this, "Card Removed", Toast.LENGTH_SHORT).show();
             }
         }).attachToRecyclerView(recyclerView);
-    }
 
+        adapter.setOnItemClickListener(new CardAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(CardData card) {
+                Intent intent = new Intent();
+            }
+        });
+    }
 }
+
+

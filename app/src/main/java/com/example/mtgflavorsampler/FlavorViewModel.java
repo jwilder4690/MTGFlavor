@@ -25,6 +25,7 @@ public class FlavorViewModel extends AndroidViewModel{
         currentCard = repository.getCurrentCard();
         currentArtCrop = repository.getCurrentArtCrop();
         currentCardArt = repository.getCurrentCardArt();
+        Log.i("DEBUG", "FlavorViewModel constructed.");
     }
 
     public Bitmap getCurrentArtCrop(){
@@ -43,8 +44,16 @@ public class FlavorViewModel extends AndroidViewModel{
         repository.fetchCard();
     }
 
-    public void insert(){
+    //List Operations
+    public boolean insert(){
+        List<CardData> cards = repository.getList();
+        for(int i = 0; i < cards.size(); i++ ){
+            //Checks if card of same name exists in database
+            Log.i("DEBUG", cards.get(i).getName());
+            if(cards.get(i).getName().equalsIgnoreCase(currentCard.getValue().getName())) return false;
+        }
         repository.insert();
+        return true;
     }
 
     public void delete(CardData card){

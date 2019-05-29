@@ -23,4 +23,7 @@ public interface CardDao {
     @Query("SELECT * FROM card_table ORDER BY id DESC")
     LiveData<List<CardData>> getAllCards();
     //can use SQL operations
+
+    @Query("SELECT * FROM card_table ORDER BY id DESC")
+    List<CardData> getList();
 }

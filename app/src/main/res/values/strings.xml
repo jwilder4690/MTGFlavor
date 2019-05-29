@@ -5,4 +5,8 @@
     <string name="cardInfo2">Card Image</string>
     <string name="cardInfo1">Card Art</string>
     <string name="next_button">More flavor!</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="list_title">My Favorites</string>
 </resources>

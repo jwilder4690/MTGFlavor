@@ -25,8 +25,8 @@ public class CardRepository {
     private LiveData<List<CardData>> allCards;
     private List<CardData> currentList = new ArrayList<>(); //temp
     private MutableLiveData<CardData> currentCard = new MutableLiveData<>();
-    public MutableLiveData<Bitmap> currentArtCrop = new MutableLiveData<>();
-    public MutableLiveData<Bitmap> currentCardArt = new MutableLiveData<>();
+    public Bitmap currentArtCrop;
+    public Bitmap currentCardArt;
 
     public CardRepository(Application application){
         CardDatabase database = CardDatabase.getInstance(application);
@@ -43,9 +43,14 @@ public class CardRepository {
     }
 
     public void swap(int start, int end){
-        int temp = allCards.getValue().get(end).getId();
-        allCards.getValue().get(end).setId(allCards.getValue().get(start).getId());
-        allCards.getValue().get(start).setId(temp);
+        //this works, but something (Async task?) is causing the dragged item to be dropped
+        //Try only calling this method after releasing?
+        int startId = allCards.getValue().get(start).getFavorite();
+        int endId =  allCards.getValue().get(end).getFavorite();
+        allCards.getValue().get(end).setFavorite(startId);
+        update(allCards.getValue().get(end));
+        allCards.getValue().get(start).setFavorite(endId);
+        update(allCards.getValue().get(start));
         fetchList();
     }
     //Keep, may be used to update priority
@@ -60,7 +65,6 @@ public class CardRepository {
 
     //Use for Live Data
     public LiveData<List<CardData>> getAllCards(){
-        Log.i("DEBUG", "I am in repo");
         return allCards;
     }
     //Use for immediate Data
@@ -76,11 +80,19 @@ public class CardRepository {
         new GetListAsyncTask(cardDao, this).execute();
     }
 
-    public LiveData<Bitmap> getCurrentArtCrop(){
+    public Bitmap getCurrentArtCrop(){
         return currentArtCrop;
     }
 
-    public MutableLiveData<Bitmap> getCurrentCardArt() {
+    public void setCurrentArtCrop(Bitmap in){
+        currentArtCrop = in;
+    }
+
+    public void setCurrentCardArt(Bitmap in){
+        currentCardArt = in;
+    }
+
+    public Bitmap getCurrentCardArt() {
         return currentCardArt;
     }
 
@@ -123,9 +135,9 @@ public class CardRepository {
             CardData loadedCard = webservice.loadCard();
             try{
                 InputStream in = (InputStream) new URL(loadedCard.getArtCropUrl()).getContent();
-                repository.currentArtCrop.postValue(BitmapFactory.decodeStream(in));
+                repository.setCurrentArtCrop(BitmapFactory.decodeStream(in));
                 in = (InputStream) new URL(loadedCard.getCardArtUrl()).getContent();
-                repository.currentCardArt.postValue(BitmapFactory.decodeStream(in));
+                repository.setCurrentCardArt(BitmapFactory.decodeStream(in));
             }
             catch (MalformedURLException e){
                 Log.e("ERROR", "Bad URL from API.");
@@ -138,7 +150,6 @@ public class CardRepository {
 
         @Override
         protected void onPostExecute(CardData result){
-            Log.i("DEGUG", result.getName());
             this.repository.setCurrentCard(result);
         }
     }
@@ -174,6 +185,10 @@ public class CardRepository {
         @Override
         protected void onPostExecute(List<CardData> result){
             this.repository.setList(result);
+            for (CardData card: result) {
+                Log.i("DEBUG", "ID: "+card.getId() +" "+ card.getName()+" Fave: "+ card.getFavorite());
+            }
+
         }
     }
 

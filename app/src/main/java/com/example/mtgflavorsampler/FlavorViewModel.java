@@ -15,25 +15,21 @@ public class FlavorViewModel extends AndroidViewModel{
     private  CardRepository repository;
     private LiveData<List<CardData>> favoriteCards;
     private LiveData<CardData> currentCard;
-    private LiveData<Bitmap> currentArtCrop = new MutableLiveData<>();
-    private LiveData<Bitmap> currentCardArt = new MutableLiveData<>();
 
     public FlavorViewModel(@NonNull Application application) {
         super(application);
         repository = new CardRepository(application);
         favoriteCards = repository.getAllCards();
         currentCard = repository.getCurrentCard();
-        currentArtCrop = repository.getCurrentArtCrop();
-        currentCardArt = repository.getCurrentCardArt();
         Log.i("DEBUG", "FlavorViewModel constructed.");
     }
 
     public Bitmap getCurrentArtCrop(){
-        return currentArtCrop.getValue();
+        return repository.getCurrentArtCrop();
     }
 
     public Bitmap getCurrentCardArt(){
-        return currentCardArt.getValue();
+        return repository.getCurrentCardArt();
     }
 
     public LiveData<CardData> viewCard(){

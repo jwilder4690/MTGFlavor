@@ -14,7 +14,7 @@ import androidx.lifecycle.MutableLiveData;
 public class FlavorViewModel extends AndroidViewModel{
     private  CardRepository repository;
     private LiveData<List<CardData>> favoriteCards;
-    private LiveData<CardData> currentCard;
+    private MutableLiveData<CardData> currentCard;
 
     public FlavorViewModel(@NonNull Application application) {
         super(application);
@@ -40,6 +40,11 @@ public class FlavorViewModel extends AndroidViewModel{
         repository.fetchCard();
     }
 
+    public void setCurrentCard(CardData card){
+        repository.displayCard(card);
+        //currentCard = repository.getCurrentCard();
+    }
+
     //List Operations
     public boolean insert(){
         List<CardData> cards = repository.getList();
@@ -50,6 +55,10 @@ public class FlavorViewModel extends AndroidViewModel{
         }
         repository.insert();
         return true;
+    }
+
+    public void updateRange(int start, int end){
+        repository.updateRange(start,end);
     }
 
     public void delete(CardData card){

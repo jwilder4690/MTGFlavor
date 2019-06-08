@@ -88,7 +88,6 @@ public class DisplayFragment extends Fragment {
         artCropView = v.findViewById(R.id.image_view_art_crop);
         cardArtView = v.findViewById(R.id.image_view_card_art);
 
-
         return v;
     }
 

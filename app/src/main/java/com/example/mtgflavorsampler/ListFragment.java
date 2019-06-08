@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -97,35 +99,95 @@ public class ListFragment extends Fragment {
             }
         });
 
-        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN,
-                ItemTouchHelper.RIGHT ) {
-            @Override
-            public boolean isItemViewSwipeEnabled(){
-                return true;
-            }
-
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                //both needed? TODO: Current list creation sorts by priority, so we need to not change the order back each time
-                flavorViewModel.swap(viewHolder.getAdapterPosition(), target.getAdapterPosition());
-                adapter.swapItems(viewHolder.getAdapterPosition(), target.getAdapterPosition());
-                return true;
-            }
-
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                flavorViewModel.delete(adapter.getCardAt(viewHolder.getAdapterPosition()));
-                Toast.makeText(getActivity(), "Card Removed", Toast.LENGTH_SHORT).show();
-            }
-        }).attachToRecyclerView(recyclerView);
+        /*
+            Creates an ItemTouchHelper using my custom ItemTouchCallback class and attaches it to the
+            recyclerView.
+         */
+        new ItemTouchHelper(new ItemTouchCallback(adapter)).attachToRecyclerView(recyclerView);
 
         adapter.setOnItemClickListener(new CardAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(CardData card) {
-                Intent intent = new Intent();
+                /*
+                    Updates current card and changes to DisplayFragment in order to view it.
+                 */
+                flavorViewModel.setCurrentCard(card);
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.frame, DisplayFragment.newInstance("a", "b"))
+                        .addToBackStack(card.getName())
+                        .commit();
             }
         });
     }
+
+    public class ItemTouchCallback extends ItemTouchHelper.Callback {
+        private CardAdapter adapter;
+
+        //Used to track where item was dragged from initially to update full list
+        private int initialPosition = 0;
+        private int currentPostion = 0;
+        private boolean dragging = false;
+
+        public ItemTouchCallback(CardAdapter adapter){
+            this.adapter = adapter;
+        }
+        @Override
+        public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+            int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+            int swipeFlags = ItemTouchHelper.RIGHT;
+            return makeMovementFlags(dragFlags, swipeFlags);
+        }
+
+        @Override
+        public boolean isItemViewSwipeEnabled(){
+            return true;
+        }
+
+
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            //grab before swap for accurate position
+            currentPostion = target.getAdapterPosition();
+
+            adapter.swapItems(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+            flavorViewModel.swap(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+            return true;
+        }
+
+//        @Override
+//        public void onMoved(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, int fromPos, @NonNull RecyclerView.ViewHolder target, int toPos, int x, int y) {
+//            super.onMoved(recyclerView, viewHolder, fromPos, target, toPos, x, y);
+//        }
+
+        @Override
+        public void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
+            super.onSelectedChanged(viewHolder, actionState);
+            if(actionState == ItemTouchHelper.ACTION_STATE_DRAG){
+                Toast.makeText(getActivity(), "Started Dragging", Toast.LENGTH_SHORT).show();
+                initialPosition = viewHolder.getAdapterPosition();
+                dragging = true;
+            }
+            if(actionState == ItemTouchHelper.ACTION_STATE_IDLE){
+                Toast.makeText(getActivity(), "Now Idle", Toast.LENGTH_SHORT).show();
+                if(dragging){
+                    flavorViewModel.updateRange(initialPosition, currentPostion);
+                    dragging = false;
+                }
+            }
+        }
+
+        @Override
+        public boolean isLongPressDragEnabled() {
+            return true;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            flavorViewModel.delete(adapter.getCardAt(viewHolder.getAdapterPosition()));
+            Toast.makeText(getActivity(), "Card Removed", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     /*
         All below methods were created automatically with the blank fragment template. Some may be

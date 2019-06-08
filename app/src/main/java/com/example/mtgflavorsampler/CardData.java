@@ -37,8 +37,6 @@ public class CardData {
         catch (JSONException j) {
             Log.e("Exception", j.toString());
         }
-        //TODO: Fix, this is just 0
-        this.favorite = id;
     }
 
     public CardData(String name, String flavorText, String artist, String artCropUrl, String cardArtUrl) {
@@ -47,7 +45,6 @@ public class CardData {
         this.artist = artist;
         this.artCropUrl = artCropUrl;
         this.cardArtUrl = cardArtUrl;
-        this.favorite = id;
     }
 
     public void setId(int id) {

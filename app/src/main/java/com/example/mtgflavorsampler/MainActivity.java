@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements DisplayFragment.O
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.frame, DisplayFragment.newInstance("a", "b"))
                     .commit();
-            getSupportActionBar().setTitle("Flavor Text of the Day");
+            getSupportActionBar().setTitle("MTG Flavor Sampler");
         }
     }
 

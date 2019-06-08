@@ -5,12 +5,15 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -38,21 +41,74 @@ public class CardRepository {
     }
 
     public void insert(){
-        new InsertCardAsyncTask(cardDao).execute(currentCard.getValue());
+        CardData newInsert = currentCard.getValue();
+        newInsert.setFavorite(currentList.size());
+        new InsertCardAsyncTask(cardDao).execute(newInsert);
         fetchList();
     }
 
+    public void updateRange(int first, int last){
+        int start;
+        int end;
+        if(first < last){
+            start = first;
+            end = last;
+        }
+        else{
+            start = last;
+            end = first;
+        }
+        for(int i = start; i <= end; i++){
+            update(allCards.getValue().get(i));
+        }
+    }
+
     public void swap(int start, int end){
-        //this works, but something (Async task?) is causing the dragged item to be dropped
-        //Try only calling this method after releasing?
+//        Log.i("DEBUG", "Swapping from " + start +" to "+ end);
+//        //TODO: Rework this method to loop through, swapping elements between start and end.
+//        // Be sure to check if start > or < end, because the algorithm is different when dragging
+//        //up versus down. Find generic method?
+//
+//        int tempId1;
+//        int tempId2;
+//
+//        //Case dragging from top of list down
+//        if(start < end){
+//            for(int i = start; i < end; i++){
+//                tempId1 = allCards.getValue().get(i).getFavorite();
+//                tempId2 = allCards.getValue().get(i+1).getFavorite();
+//                allCards.getValue().get(i+1).setFavorite(tempId1);
+//                allCards.getValue().get(i).setFavorite(tempId2);
+//            }
+//            for(int i = start; i < end; i++){
+//                update(allCards.getValue().get(i));
+//            }
+//        }
+//
+//        //Case dragging from bottom of list up
+//        if(start > end){
+//            for(int i = end; i > start; i--){
+//                tempId1 = allCards.getValue().get(i).getFavorite();
+//                tempId2 = allCards.getValue().get(i-1).getFavorite();
+//                allCards.getValue().get(i-1).setFavorite(tempId1);
+//                allCards.getValue().get(i).setFavorite(tempId2);
+//            }
+//            for(int i = end; i >= start; i--){
+//                update(allCards.getValue().get(i));
+//            }
+//        }
+//
+//        fetchList();
+
         int startId = allCards.getValue().get(start).getFavorite();
         int endId =  allCards.getValue().get(end).getFavorite();
         allCards.getValue().get(end).setFavorite(startId);
-        update(allCards.getValue().get(end));
+        //update(allCards.getValue().get(end));
         allCards.getValue().get(start).setFavorite(endId);
-        update(allCards.getValue().get(start));
+        //update(allCards.getValue().get(start));
         fetchList();
     }
+
     //Keep, may be used to update priority
     public void update(CardData card){
         new UpdateCardAsyncTask(cardDao).execute(card);
@@ -96,13 +152,17 @@ public class CardRepository {
         return currentCardArt;
     }
 
-    public LiveData<CardData> getCurrentCard(){
+    public MutableLiveData<CardData> getCurrentCard(){
         //TODO: figure out what to do if null, as AsyncTask may not be complete yet.
         // Need to use temp until new card is fetched
         if(currentCard == null){
             fetchCard();
         }
         return currentCard;
+    }
+
+    public void displayCard(CardData card){
+        new FetchCardAsyncTask(this, false).execute(card);
     }
 
     public void setCurrentCard(CardData card){
@@ -117,22 +177,33 @@ public class CardRepository {
 
     public void fetchCard(){
         // This will fetch a new card from the web and update current card.
-        new FetchCardAsyncTask(this).execute();
+        new FetchCardAsyncTask(this, true).execute();
     }
 
-    private static class FetchCardAsyncTask extends AsyncTask<Void, Void, CardData>{
-        //better to make taskCard public or do it this way? Maybe protected? IDK
+    /*
+        This class handles accessing information from the web.
+
+        If the fromWeb arg is true, the task will pull a new card from the web service.
+        if the fromWeb arg is false, the task will use provided card.
+
+        The images are pulled from the card information and stored in the repository.
+     */
+    private static class FetchCardAsyncTask extends AsyncTask<CardData, Void, CardData>{
         private CardRepository repository;
         private Webservice webservice;
+        private boolean loadFromWeb;
 
-        private  FetchCardAsyncTask(CardRepository repository){
+        private  FetchCardAsyncTask(CardRepository repository, boolean fromWeb){
             webservice = new Webservice();
             this.repository = repository;
+            this.loadFromWeb = fromWeb;
         }
 
         @Override
-        protected CardData doInBackground(Void... voids){
-            CardData loadedCard = webservice.loadCard();
+        protected CardData doInBackground(CardData... cards){
+            CardData loadedCard;
+            if(loadFromWeb) loadedCard = webservice.loadCard();
+            else loadedCard = cards[0];
             try{
                 InputStream in = (InputStream) new URL(loadedCard.getArtCropUrl()).getContent();
                 repository.setCurrentArtCrop(BitmapFactory.decodeStream(in));

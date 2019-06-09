@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -32,6 +33,7 @@ public class DisplayFragment extends Fragment {
     TextView artistView;
     ImageView artCropView;
     ImageView cardArtView;
+    ConstraintLayout mainLayout;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -87,6 +89,7 @@ public class DisplayFragment extends Fragment {
         artistView = v.findViewById(R.id.text_view_artist);
         artCropView = v.findViewById(R.id.image_view_art_crop);
         cardArtView = v.findViewById(R.id.image_view_card_art);
+        mainLayout = v.findViewById(R.id.card_main_layout);
 
         return v;
     }
@@ -104,6 +107,7 @@ public class DisplayFragment extends Fragment {
                 artistView.setText(card.getArtist());
                 artCropView.setImageBitmap(flavorViewModel.getCurrentArtCrop());
                 cardArtView.setImageBitmap(flavorViewModel.getCurrentCardArt());
+                mainLayout.setBackgroundColor(getResources().getColor(card.getColor()));
             }
         });
     }

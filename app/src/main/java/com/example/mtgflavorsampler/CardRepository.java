@@ -35,14 +35,14 @@ public class CardRepository {
         CardDatabase database = CardDatabase.getInstance(application);
         cardDao = database.cardDao();
         allCards = cardDao.getAllCards();
-        currentCard.setValue(new CardData("CardName", "I am a cool card", "me", "www.com", "www.com"));
+        currentCard.setValue(new CardData("CardName", "I am a cool card", "me", "www.com", "www.com", R.color.red));
         fetchList();
         fetchCard();
     }
 
     public void insert(){
         CardData newInsert = currentCard.getValue();
-        newInsert.setFavorite(currentList.size());
+        if(currentList.size() > 0) newInsert.setFavorite(currentList.get(currentList.size()-1).getFavorite()+1);
         new InsertCardAsyncTask(cardDao).execute(newInsert);
         fetchList();
     }

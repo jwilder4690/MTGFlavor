@@ -9,7 +9,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {CardData.class}, version = 1)
+@Database(entities = {CardData.class}, version = 2)
 public abstract class CardDatabase extends RoomDatabase {
 
     private static CardDatabase instance;
@@ -45,7 +45,7 @@ public abstract class CardDatabase extends RoomDatabase {
         @Override
         protected Void doInBackground(Void... voids){
             //Do manual insert of Angelheart Vial or Omniscience
-            cardDao.insert(new CardData("CardName", "I am a cool card", "me", "www.com", "www.com"));
+            cardDao.insert(new CardData("CardName", "I am a cool card", "me", "www.com", "www.com", R.color.red));
             return null;
         }
     }

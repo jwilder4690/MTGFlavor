@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "card_table")
@@ -27,6 +28,12 @@ public class CardData {
     public CardData(String webCard){
         try{
             JSONObject cardJSON = new JSONObject(webCard);
+            //If dual face card, images and flavor text will be held in one of the faces
+            if(cardJSON.getString("layout").equals("transform")){
+                JSONArray faceArray = cardJSON.getJSONArray("card_faces");
+                cardJSON = faceArray.getJSONObject(0);
+
+            }
             name = cardJSON.getString("name");
             flavorText = cardJSON.getString("flavor_text");
             artist = cardJSON.getString("artist");
@@ -37,17 +44,28 @@ public class CardData {
             cardArtUrl = images.getString("png");
 
             JSONArray colors = cardJSON.getJSONArray("colors");
-            if(colors.length() > 1) color = R.color.Gold;
-            else if(colors.length() == 0) color = R.color.Brown;
-            else{
-                Log.i("DEBUG", "My color is: "+ colors.getString(0));
-                switch (colors.getString(0)){
-                    case "W": color = R.color.W; break;
-                    case "U": color = R.color.U; break;
-                    case "B": color = R.color.B; break;
-                    case "R": color = R.color.R; break;
-                    case "G": color = R.color.G; break;
-                    default: color = R.color.red;
+            if (colors.length() > 1) color = R.color.Gold;
+            else if (colors.length() == 0) color = R.color.Brown;
+            else {
+                Log.i("DEBUG", "My color is: " + colors.getString(0));
+                switch (colors.getString(0)) {
+                    case "W":
+                        color = R.color.W;
+                        break;
+                    case "U":
+                        color = R.color.U;
+                        break;
+                    case "B":
+                        color = R.color.B;
+                        break;
+                    case "R":
+                        color = R.color.R;
+                        break;
+                    case "G":
+                        color = R.color.G;
+                        break;
+                    default:
+                        color = R.color.U;
                 }
             }
         }
@@ -63,6 +81,19 @@ public class CardData {
         this.artCropUrl = artCropUrl;
         this.cardArtUrl = cardArtUrl;
         this.color = color;
+    }
+
+    /**
+     *  Use as default card.
+     */
+    @Ignore
+    public CardData(){
+        name = "Omniscience";
+        flavorText = "\"The things I once imagined would be my greatest achievements were only the first steps toward a future I can only begin to fathom.\"\n— Jace Beleren";
+        artist = "Jason Chan";
+        artCropUrl = "https://img.scryfall.com/cards/art_crop/en/m19/65.jpg?1531451394";
+        cardArtUrl = "https://img.scryfall.com/cards/png/en/m19/65.png?1531451394";
+        color = R.color.U;
     }
 
     public void setId(int id) {

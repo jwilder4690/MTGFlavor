@@ -44,8 +44,8 @@ public abstract class CardDatabase extends RoomDatabase {
         }
         @Override
         protected Void doInBackground(Void... voids){
-            //Do manual insert of Angelheart Vial or Omniscience
-            cardDao.insert(new CardData("CardName", "I am a cool card", "me", "www.com", "www.com", R.color.red));
+            //Default card (Omniscience) inserted
+            cardDao.insert(new CardData());
             return null;
         }
     }

@@ -35,7 +35,7 @@ public class CardRepository {
         CardDatabase database = CardDatabase.getInstance(application);
         cardDao = database.cardDao();
         allCards = cardDao.getAllCards();
-        currentCard.setValue(new CardData("CardName", "I am a cool card", "me", "www.com", "www.com", R.color.red));
+        currentCard.setValue(new CardData());
         fetchList();
         fetchCard();
     }

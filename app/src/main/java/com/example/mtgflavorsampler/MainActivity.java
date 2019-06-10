@@ -14,6 +14,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
+/**
+    Main activity 
+*/
 
 public class MainActivity extends AppCompatActivity implements DisplayFragment.OnDisplayFragmentInteractionListener, ListFragment.OnListFragmentInteractionListener{
     private FlavorViewModel flavorViewModel;

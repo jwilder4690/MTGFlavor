@@ -22,6 +22,7 @@ public class CardData {
     private String artist;
     private String artCropUrl;
     private String cardArtUrl;
+    private String webUrl;
     private int color;
     private int favorite = 0; //use later for ordering your faves
 
@@ -32,16 +33,17 @@ public class CardData {
             if(cardJSON.getString("layout").equals("transform")){
                 JSONArray faceArray = cardJSON.getJSONArray("card_faces");
                 cardJSON = faceArray.getJSONObject(0);
-
             }
+
             name = cardJSON.getString("name");
             flavorText = cardJSON.getString("flavor_text");
             artist = cardJSON.getString("artist");
+            webUrl = cardJSON.getString("scryfall_uri");
 
             JSONObject images = cardJSON.getJSONObject("image_uris");
             artCropUrl = images.getString("art_crop");
-            //cardArtUrl = images.getString("border_crop");
             cardArtUrl = images.getString("png");
+
 
             JSONArray colors = cardJSON.getJSONArray("colors");
             if (colors.length() > 1) color = R.color.Gold;
@@ -74,13 +76,14 @@ public class CardData {
         }
     }
 
-    public CardData(String name, String flavorText, String artist, String artCropUrl, String cardArtUrl, int color) {
+    public CardData(String name, String flavorText, String artist, String artCropUrl, String cardArtUrl, int color, String webUrl) {
         this.name = name;
         this.flavorText = flavorText;
         this.artist = artist;
         this.artCropUrl = artCropUrl;
         this.cardArtUrl = cardArtUrl;
         this.color = color;
+        this.webUrl = webUrl;
     }
 
     /**
@@ -93,6 +96,7 @@ public class CardData {
         artist = "Jason Chan";
         artCropUrl = "https://img.scryfall.com/cards/art_crop/en/m19/65.jpg?1531451394";
         cardArtUrl = "https://img.scryfall.com/cards/png/en/m19/65.png?1531451394";
+        webUrl = "https://scryfall.com/card/m13/63/omniscience?utm_source=api";
         color = R.color.U;
     }
 
@@ -108,9 +112,9 @@ public class CardData {
         return name;
     }
 
-    public String getFlavorText() {
-        return flavorText;
-    }
+    public String getFlavorText() { return flavorText; }
+
+    public String getWebUrl(){ return webUrl;}
 
     public String getArtist() {
         return artist;

@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -27,6 +28,11 @@ import android.widget.TextView;
  * create an instance of this fragment.
  */
 public class DisplayFragment extends Fragment {
+
+    static{
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
+
     private FlavorViewModel flavorViewModel;
     TextView nameView;
     TextView flavorView;
@@ -75,6 +81,7 @@ public class DisplayFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
     @Override
@@ -90,6 +97,12 @@ public class DisplayFragment extends Fragment {
         artCropView = v.findViewById(R.id.image_view_art_crop);
         cardArtView = v.findViewById(R.id.image_view_card_art);
         mainLayout = v.findViewById(R.id.card_main_layout);
+
+        ImageView favoriteButton = v.findViewById(R.id.add_to_favorites);
+        favoriteButton.setImageResource(R.drawable.ic_favorite);
+
+        ImageView webButton = v.findViewById(R.id.go_to_web);
+        webButton.setImageResource(R.drawable.ic_open_in_web);
 
         return v;
     }

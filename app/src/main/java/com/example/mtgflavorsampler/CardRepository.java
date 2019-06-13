@@ -64,42 +64,6 @@ public class CardRepository {
     }
 
     public void swap(int start, int end){
-//        Log.i("DEBUG", "Swapping from " + start +" to "+ end);
-//        //TODO: Rework this method to loop through, swapping elements between start and end.
-//        // Be sure to check if start > or < end, because the algorithm is different when dragging
-//        //up versus down. Find generic method?
-//
-//        int tempId1;
-//        int tempId2;
-//
-//        //Case dragging from top of list down
-//        if(start < end){
-//            for(int i = start; i < end; i++){
-//                tempId1 = allCards.getValue().get(i).getFavorite();
-//                tempId2 = allCards.getValue().get(i+1).getFavorite();
-//                allCards.getValue().get(i+1).setFavorite(tempId1);
-//                allCards.getValue().get(i).setFavorite(tempId2);
-//            }
-//            for(int i = start; i < end; i++){
-//                update(allCards.getValue().get(i));
-//            }
-//        }
-//
-//        //Case dragging from bottom of list up
-//        if(start > end){
-//            for(int i = end; i > start; i--){
-//                tempId1 = allCards.getValue().get(i).getFavorite();
-//                tempId2 = allCards.getValue().get(i-1).getFavorite();
-//                allCards.getValue().get(i-1).setFavorite(tempId1);
-//                allCards.getValue().get(i).setFavorite(tempId2);
-//            }
-//            for(int i = end; i >= start; i--){
-//                update(allCards.getValue().get(i));
-//            }
-//        }
-//
-//        fetchList();
-
         int startId = allCards.getValue().get(start).getFavorite();
         int endId =  allCards.getValue().get(end).getFavorite();
         allCards.getValue().get(end).setFavorite(startId);

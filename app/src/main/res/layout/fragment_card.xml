@@ -24,7 +24,7 @@
         android:id="@+id/scrollView"
         android:layout_width="395dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/button_flavor"
+        app:layout_constraintBottom_toTopOf="@id/buttons_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_view_activity_title"
@@ -106,15 +106,49 @@
         </LinearLayout>
     </ScrollView>
 
-    <Button
-        android:id="@+id/button_flavor"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        android:onClick="requestNewCard"
-        android:text="@string/next_button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/buttons_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageButton
+            android:id="@+id/go_to_web"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:contentDescription="scryfall_website"
+            android:onClick="goToWeb"
+            tools:src="@drawable/ic_open_in_web" />
+
+        <Button
+            android:id="@+id/button_flavor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:onClick="requestNewCard"
+            android:text="@string/next_button"
+            android:layout_marginRight="100dp"
+            android:layout_marginLeft="100dp"
+            android:layout_weight="1"/>
+
+        <ImageButton
+            android:id="@+id/add_to_favorites"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:contentDescription="add_to_favorites"
+            android:cropToPadding="false"
+            android:onClick="addToFavorites"
+            tools:src="@drawable/ic_favorite" />
+
+
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

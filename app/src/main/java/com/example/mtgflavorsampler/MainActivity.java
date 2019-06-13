@@ -1,8 +1,10 @@
 package com.example.mtgflavorsampler;
 
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.FragmentManager;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
@@ -28,12 +30,15 @@ public class MainActivity extends AppCompatActivity implements DisplayFragment.O
 
         flavorViewModel = ViewModelProviders.of(this).get(FlavorViewModel.class);
 
+
         if(savedInstanceState == null) {  //if null this is first time creation
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.frame, DisplayFragment.newInstance("a", "b"))
                     .commit();
             getSupportActionBar().setTitle("MTG Flavor Sampler");
         }
+
+
     }
 
     @Override
@@ -53,13 +58,7 @@ public class MainActivity extends AppCompatActivity implements DisplayFragment.O
                         .commit();
                 return true;
             case R.id.add_to_favorites:
-                boolean added = flavorViewModel.insert();
-                if(added) {
-                    Toast.makeText(MainActivity.this, "Added to favorites", Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    Toast.makeText(MainActivity.this, "Duplicate not added", Toast.LENGTH_SHORT).show();
-                }
+
                 return true;
             case R.id.back_arrow:
                 getSupportFragmentManager().popBackStackImmediate();
@@ -71,6 +70,23 @@ public class MainActivity extends AppCompatActivity implements DisplayFragment.O
 
     public void requestNewCard(View view){
         flavorViewModel.requestNewCard();
+    }
+
+    public void addToFavorites(View view){
+        boolean added = flavorViewModel.insert();
+        if(added) {
+            Toast.makeText(MainActivity.this, "Added to favorites", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(MainActivity.this, "Duplicate not added", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void goToWeb(View view){
+        CardData myCard = flavorViewModel.viewCard().getValue();
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(myCard.getWebUrl()));
+        startActivity(browserIntent);
+        Toast.makeText(MainActivity.this, "Going to Scryfall", Toast.LENGTH_SHORT).show();
     }
 
     @Override

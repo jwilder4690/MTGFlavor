@@ -11,6 +11,10 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+/**
+    This class represents the data stored inside the database. 
+*/
+
 @Entity(tableName = "card_table")
 public class CardData {
 
@@ -23,7 +27,7 @@ public class CardData {
     private String artCropUrl;
     private String cardArtUrl;
     private String webUrl;
-    private int color;
+    private int color; //used for background color
     private int favorite = 0; //use later for ordering your faves
 
     public CardData(String webCard){
@@ -44,7 +48,10 @@ public class CardData {
             artCropUrl = images.getString("art_crop");
             cardArtUrl = images.getString("png");
 
-
+            /*
+                Color is stored in the JSON as an array of colors with 0,1, or more as possibilities. 
+                This section assigns the corresponding color from the colors.xml to the object. 
+            */
             JSONArray colors = cardJSON.getJSONArray("colors");
             if (colors.length() > 1) color = R.color.Gold;
             else if (colors.length() == 0) color = R.color.Brown;

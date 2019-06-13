@@ -17,7 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-/*
+/**
     This class utilizes AsyncTasks<Params, Progress, Result> in order to handle operations that will
     not be instantaneous (Interacting with the web or our database). This prevents our UI from hanging
     or crashing while we fetch items.
@@ -26,7 +26,7 @@ import androidx.lifecycle.MutableLiveData;
 public class CardRepository {
     private CardDao cardDao;
     private LiveData<List<CardData>> allCards;
-    private List<CardData> currentList = new ArrayList<>(); //temp
+    private List<CardData> currentList = new ArrayList<>(); //temp, will get populated by getList()
     private MutableLiveData<CardData> currentCard = new MutableLiveData<>();
     public Bitmap currentArtCrop;
     public Bitmap currentCardArt;
@@ -42,11 +42,15 @@ public class CardRepository {
 
     public void insert(){
         CardData newInsert = currentCard.getValue();
+        //Starting favorite set to one more than last Card in list. TODO: change to start at top of list. 
         if(currentList.size() > 0) newInsert.setFavorite(currentList.get(currentList.size()-1).getFavorite()+1);
         new InsertCardAsyncTask(cardDao).execute(newInsert);
         fetchList();
     }
 
+    /**
+        Updates the 
+    */
     public void updateRange(int first, int last){
         int start;
         int end;

@@ -8,6 +8,10 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
+/**
+    This interface establishes the methods that will interat with the database. The functionality is 
+    handled via the annotations preceding the methods and class. 
+*/
 @Dao
 public interface CardDao {
 
@@ -20,10 +24,11 @@ public interface CardDao {
     @Delete
     void delete(CardData card);
 
+    //can use SQL operations
     @Query("SELECT * FROM card_table ORDER BY favorite ASC")
     LiveData<List<CardData>> getAllCards();
-    //can use SQL operations
-
+    
+    //This method returns a list instead of LiveData to allow swapping operations. 
     @Query("SELECT * FROM card_table ORDER BY favorite ASC")
     List<CardData> getList();
 }

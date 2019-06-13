@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -70,6 +71,8 @@ public class MainActivity extends AppCompatActivity implements DisplayFragment.O
 
     public void requestNewCard(View view){
         flavorViewModel.requestNewCard();
+        ScrollView scrollView = findViewById(R.id.scrollView);
+        scrollView.smoothScrollTo(0,0);
     }
 
     public void addToFavorites(View view){

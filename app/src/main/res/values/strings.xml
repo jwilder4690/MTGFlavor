@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MTG Flavor Sampler</string>
+    <string name="app_name">Tasty MTG</string>
     <string name="title">Flavor Text of the Day</string>
     <string name="default_text">“The things I once imagined would be my greatest achievements were only the first steps toward a future I can only begin to fathom.” —Jace Beleren</string>
     <string name="cardInfo2">Card Image</string>

@@ -1,9 +1,12 @@
 package com.example.mtgflavorsampler;
 
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +30,8 @@ public class CardAdapter extends RecyclerView.Adapter <CardAdapter.CardHolder> {
         CardData currentCard = cards.get(position);
         holder.textViewName.setText(currentCard.getName());
         holder.textViewFlavorText.setText(currentCard.getFlavorText());
+        holder.layoutCardItem.setBackgroundColor(holder.resources.getColor(currentCard.getColor()));
+        Log.i("DEBUG", currentCard.getName()+" is the color: "+ currentCard.getColor());
     }
 
     @Override
@@ -53,11 +58,15 @@ public class CardAdapter extends RecyclerView.Adapter <CardAdapter.CardHolder> {
     class CardHolder extends RecyclerView.ViewHolder{
         private TextView textViewName;
         private TextView textViewFlavorText;
+        private RelativeLayout layoutCardItem;
+        private Resources resources;
 
         public CardHolder(@NonNull View itemView) {
             super(itemView);
             textViewName = itemView.findViewById(R.id.text_view_cardName);
             textViewFlavorText = itemView.findViewById(R.id.text_view_flavorText);
+            layoutCardItem = itemView.findViewById(R.id.card_item);
+            resources = itemView.getResources();
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -125,7 +125,7 @@ public class ListFragment extends Fragment {
 
         //Used to track where item was dragged from initially to update full list
         private int initialPosition = 0;
-        private int currentPostion = 0;
+        private int currentPosition = 0;
         private boolean dragging = false;
 
         public ItemTouchCallback(CardAdapter adapter){
@@ -147,17 +147,12 @@ public class ListFragment extends Fragment {
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
             //grab before swap for accurate position
-            currentPostion = target.getAdapterPosition();
+            currentPosition = target.getAdapterPosition();
 
             adapter.swapItems(viewHolder.getAdapterPosition(), target.getAdapterPosition());
             flavorViewModel.swap(viewHolder.getAdapterPosition(), target.getAdapterPosition());
             return true;
         }
-
-//        @Override
-//        public void onMoved(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, int fromPos, @NonNull RecyclerView.ViewHolder target, int toPos, int x, int y) {
-//            super.onMoved(recyclerView, viewHolder, fromPos, target, toPos, x, y);
-//        }
 
         @Override
         public void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
@@ -170,7 +165,7 @@ public class ListFragment extends Fragment {
             if(actionState == ItemTouchHelper.ACTION_STATE_IDLE){
                 Toast.makeText(getActivity(), "Now Idle", Toast.LENGTH_SHORT).show();
                 if(dragging){
-                    flavorViewModel.updateRange(initialPosition, currentPostion);
+                    flavorViewModel.updateRange(initialPosition, currentPosition);
                     dragging = false;
                 }
             }

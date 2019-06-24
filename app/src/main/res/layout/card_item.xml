@@ -21,6 +21,8 @@
             android:id="@+id/text_view_cardName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toStartOf="@id/drag_handle"
+            android:layout_toLeftOf="@id/drag_handle"
             android:text="Card Name"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:maxLines="1"
@@ -33,11 +35,23 @@
             android:id="@+id/text_view_flavorText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toStartOf="@id/drag_handle"
+            android:layout_toLeftOf="@id/drag_handle"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:layout_below="@id/text_view_cardName"
             android:text="This is the flavor text for this card."
             android:maxLines="1"
             android:ellipsize="end"/>
 
+        <ImageView
+            android:id="@+id/drag_handle"
+            android:paddingTop="12dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            app:srcCompat="@drawable/ic_drag_handle" />
 
 
     </RelativeLayout>

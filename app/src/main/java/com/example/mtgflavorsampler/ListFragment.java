@@ -28,9 +28,10 @@ import java.util.List;
  * Use the {@link ListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ListFragment extends Fragment {
+public class ListFragment extends Fragment implements CardAdapter.OnStartDragListener {
 
     private FlavorViewModel flavorViewModel;
+    private ItemTouchHelper itemTouchHelper;
     RecyclerView recyclerView;
     Button backButton;
 
@@ -83,7 +84,7 @@ public class ListFragment extends Fragment {
          */
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
-        final CardAdapter adapter = new CardAdapter();
+        final CardAdapter adapter = new CardAdapter(this);
         recyclerView.setAdapter(adapter);
 
         flavorViewModel.getFavoriteCards().observe(getViewLifecycleOwner(), new Observer<List<CardData>>() {
@@ -97,7 +98,8 @@ public class ListFragment extends Fragment {
             Creates an ItemTouchHelper using my custom ItemTouchCallback class and attaches it to the
             recyclerView.
          */
-        new ItemTouchHelper(new ItemTouchCallback(adapter)).attachToRecyclerView(recyclerView);
+        itemTouchHelper = new ItemTouchHelper(new ItemTouchCallback(adapter));
+        itemTouchHelper.attachToRecyclerView(recyclerView);
 
         adapter.setOnItemClickListener(new CardAdapter.OnItemClickListener() {
             @Override
@@ -113,6 +115,12 @@ public class ListFragment extends Fragment {
             }
         });
     }
+
+    @Override
+    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+        itemTouchHelper.startDrag(viewHolder);
+    }
+
 
     public class ItemTouchCallback extends ItemTouchHelper.Callback {
         private CardAdapter adapter;
@@ -176,6 +184,7 @@ public class ListFragment extends Fragment {
             Toast.makeText(getActivity(), "Card Removed", Toast.LENGTH_SHORT).show();
         }
     }
+
 
 
     /*

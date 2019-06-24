@@ -2,8 +2,10 @@ package com.example.mtgflavorsampler;
 
 import android.content.res.Resources;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import java.util.ArrayList;
@@ -14,6 +16,11 @@ import androidx.recyclerview.widget.RecyclerView;
 public class CardAdapter extends RecyclerView.Adapter <CardAdapter.CardHolder> {
     private List<CardData> cards = new ArrayList<>();
     private OnItemClickListener listener;
+    private OnStartDragListener dragListener;
+
+    CardAdapter(OnStartDragListener dragListener){
+        this.dragListener = dragListener;
+    }
 
     @NonNull
     @Override
@@ -24,11 +31,21 @@ public class CardAdapter extends RecyclerView.Adapter <CardAdapter.CardHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CardHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final CardHolder holder, int position) {
         CardData currentCard = cards.get(position);
         holder.textViewName.setText(currentCard.getName());
         holder.textViewFlavorText.setText(currentCard.getFlavorText());
         holder.layoutCardItem.setBackgroundColor(holder.resources.getColor(currentCard.getColor()));
+
+        holder.handleView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getActionMasked() == MotionEvent.ACTION_DOWN){
+                    dragListener.onStartDrag(holder);
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -56,12 +73,14 @@ public class CardAdapter extends RecyclerView.Adapter <CardAdapter.CardHolder> {
         private TextView textViewName;
         private TextView textViewFlavorText;
         private RelativeLayout layoutCardItem;
+        private ImageView handleView;
         private Resources resources;
 
         public CardHolder(@NonNull View itemView) {
             super(itemView);
             textViewName = itemView.findViewById(R.id.text_view_cardName);
             textViewFlavorText = itemView.findViewById(R.id.text_view_flavorText);
+            handleView = itemView.findViewById(R.id.drag_handle);
             layoutCardItem = itemView.findViewById(R.id.card_item);
             resources = itemView.getResources();
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -81,6 +100,10 @@ public class CardAdapter extends RecyclerView.Adapter <CardAdapter.CardHolder> {
 
     public interface OnItemClickListener{
         void onItemClick(CardData card);
+    }
+
+    public interface OnStartDragListener{
+        void onStartDrag(RecyclerView.ViewHolder viewHolder);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener){

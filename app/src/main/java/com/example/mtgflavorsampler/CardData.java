@@ -1,11 +1,20 @@
 package com.example.mtgflavorsampler;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+import java.sql.Blob;
 
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -24,6 +33,8 @@ public class CardData {
     private String name;
     private String flavorText;
     private String artist;
+    private String artCropPath;
+    private String cardArtPath;
     private String artCropUrl;
     private String cardArtUrl;
     private String webUrl;
@@ -83,6 +94,7 @@ public class CardData {
         }
     }
 
+
     public CardData(String name, String flavorText, String artist, String artCropUrl, String cardArtUrl, int color, String webUrl) {
         this.name = name;
         this.flavorText = flavorText;
@@ -141,7 +153,46 @@ public class CardData {
         return favorite;
     }
 
+    public String getArtCropPath() {
+        return artCropPath;
+    }
+
+    public String getCardArtPath() {
+        return cardArtPath;
+    }
+
     public void setFavorite(int change){
         favorite = change;
     }
+
+    public void setArtCropPath(String path){
+        this.artCropPath = path;
+    }
+
+    public void setCardArtPath(String path) {
+        this.cardArtPath = path;
+    }
+
+    public String getSafeName(){
+        String safeName = name;
+        safeName = safeName.replaceAll(" ", "_");
+        return safeName;
+    }
+
+    public String toString(){
+        String output = "";
+        output += "ID: "+id + "\n";
+        output += "Name: "+name + "\n";
+        output += "FlavorText: "+flavorText + "\n";
+        output += "Artist: "+artist + "\n";
+        output += "ArtCropPath: "+artCropPath + "\n";
+        output += "CardArtPath: "+cardArtPath + "\n";
+        output += "ArtCropURL: "+artCropUrl + "\n";
+        output += "CartArtURL: "+cardArtUrl + "\n";
+        output += "WebURL: "+webUrl + "\n";
+        output += "Color: "+color + "\n";
+        output += "Favorite: "+favorite + "\n";
+        return output;
+    }
+
 }

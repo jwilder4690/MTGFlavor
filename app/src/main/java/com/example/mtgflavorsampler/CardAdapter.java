@@ -1,8 +1,6 @@
 package com.example.mtgflavorsampler;
 
 import android.content.res.Resources;
-import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +29,6 @@ public class CardAdapter extends RecyclerView.Adapter <CardAdapter.CardHolder> {
         holder.textViewName.setText(currentCard.getName());
         holder.textViewFlavorText.setText(currentCard.getFlavorText());
         holder.layoutCardItem.setBackgroundColor(holder.resources.getColor(currentCard.getColor()));
-        Log.i("DEBUG", currentCard.getName()+" is the color: "+ currentCard.getColor());
     }
 
     @Override

@@ -3,15 +3,12 @@ package com.example.mtgflavorsampler;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -102,7 +99,7 @@ public class DisplayFragment extends Fragment {
         favoriteButton.setImageResource(R.drawable.ic_favorite);
 
         ImageView webButton = v.findViewById(R.id.go_to_web);
-        webButton.setImageResource(R.drawable.ic_open_in_web);
+        webButton.setImageResource(R.drawable.ic_go_to_web);
 
         return v;
     }
@@ -114,7 +111,6 @@ public class DisplayFragment extends Fragment {
         flavorViewModel.viewCard().observe(getViewLifecycleOwner(), new Observer<CardData>() {
             @Override
             public void onChanged(CardData card) {
-                Log.i("DEBUG", "CurrentCard changed.");
                 nameView.setText(card.getName());
                 flavorView.setText(card.getFlavorText());
                 artistView.setText(card.getArtist());

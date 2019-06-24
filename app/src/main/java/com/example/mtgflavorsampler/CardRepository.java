@@ -1,19 +1,22 @@
 package com.example.mtgflavorsampler;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
-
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -30,12 +33,14 @@ public class CardRepository {
     private MutableLiveData<CardData> currentCard = new MutableLiveData<>();
     public Bitmap currentArtCrop;
     public Bitmap currentCardArt;
+    Context context;
 
     public CardRepository(Application application){
         CardDatabase database = CardDatabase.getInstance(application);
         cardDao = database.cardDao();
         allCards = cardDao.getAllCards();
         currentCard.setValue(new CardData());
+        context = application.getApplicationContext();
         fetchList();
         fetchCard();
     }
@@ -108,16 +113,16 @@ public class CardRepository {
         return currentArtCrop;
     }
 
-    public void setCurrentArtCrop(Bitmap in){
-        currentArtCrop = in;
-    }
-
-    public void setCurrentCardArt(Bitmap in){
-        currentCardArt = in;
+    public void setArtCrop(Bitmap image){
+        currentArtCrop = image;
     }
 
     public Bitmap getCurrentCardArt() {
         return currentCardArt;
+    }
+
+    public void setCardArt(Bitmap image){
+        currentCardArt = image;
     }
 
     public MutableLiveData<CardData> getCurrentCard(){
@@ -130,7 +135,17 @@ public class CardRepository {
     }
 
     public void displayCard(CardData card){
-        new FetchCardAsyncTask(this, false).execute(card);
+        setCurrentCard(card);
+        try{
+            File artPath = new File(card.getArtCropPath());
+            Bitmap art =  BitmapFactory.decodeStream(new FileInputStream(artPath));
+            setArtCrop(art);
+            artPath = new File(card.getCardArtPath());
+            art = BitmapFactory.decodeStream(new FileInputStream(artPath));
+            setCardArt(art);
+        } catch (FileNotFoundException e){
+            e.printStackTrace();
+        }
     }
 
     public void setCurrentCard(CardData card){
@@ -145,7 +160,9 @@ public class CardRepository {
 
     public void fetchCard(){
         // This will fetch a new card from the web and update current card.
-        new FetchCardAsyncTask(this, true).execute();
+        //TODO: remove boolean argument
+
+        new FetchCardAsyncTask(this, context).execute();
     }
 
     /*
@@ -159,24 +176,27 @@ public class CardRepository {
     private static class FetchCardAsyncTask extends AsyncTask<CardData, Void, CardData>{
         private CardRepository repository;
         private Webservice webservice;
-        private boolean loadFromWeb;
+        private Context context;
 
-        private  FetchCardAsyncTask(CardRepository repository, boolean fromWeb){
+
+        private  FetchCardAsyncTask(CardRepository repository, Context context){
             webservice = new Webservice();
             this.repository = repository;
-            this.loadFromWeb = fromWeb;
+            this.context = context;
         }
 
         @Override
         protected CardData doInBackground(CardData... cards){
-            CardData loadedCard;
-            if(loadFromWeb) loadedCard = webservice.loadCard();
-            else loadedCard = cards[0];
+            CardData loadedCard = webservice.loadCard();
             try{
                 InputStream in = (InputStream) new URL(loadedCard.getArtCropUrl()).getContent();
-                repository.setCurrentArtCrop(BitmapFactory.decodeStream(in));
+                Bitmap art = BitmapFactory.decodeStream(in);
+                loadedCard.setArtCropPath(repository.saveToFile(art, loadedCard.getSafeName()+"_ArtCrop.png", context));
+                repository.setArtCrop(art);
                 in = (InputStream) new URL(loadedCard.getCardArtUrl()).getContent();
-                repository.setCurrentCardArt(BitmapFactory.decodeStream(in));
+                art = BitmapFactory.decodeStream(in);;
+                loadedCard.setCardArtPath(repository.saveToFile(art, loadedCard.getSafeName()+"_CardArt.png", context));
+                repository.setCardArt(art);
             }
             catch (MalformedURLException e){
                 Log.e("ERROR", "Bad URL from API.");
@@ -225,13 +245,13 @@ public class CardRepository {
         protected void onPostExecute(List<CardData> result){
             this.repository.setList(result);
             for (CardData card: result) {
-                Log.i("DEBUG", "ID: "+card.getId() +" "+ card.getName()+" Fave: "+ card.getFavorite());
+                Log.i("DEBUG", "ID: "+card.getId() +" "+ card.getName()+" Path: "+card.getArtCropPath());
             }
 
         }
     }
 
-    private static class UpdateCardAsyncTask extends AsyncTask<CardData, Void, Void>{
+    private static class UpdateCardAsyncTask extends AsyncTask<CardData, Void, CardData>{
         private CardDao cardDao;
 
         private UpdateCardAsyncTask(CardDao cardDao){
@@ -239,9 +259,14 @@ public class CardRepository {
         }
 
         @Override
-        protected Void doInBackground(CardData ... cards){
+        protected CardData doInBackground(CardData ... cards){
             cardDao.update(cards[0]);
-            return null;
+            return cards[0];
+        }
+
+        @Override
+        protected void onPostExecute(CardData result){
+            //Log.i("DEBUG", result.toString());
         }
     }
 
@@ -257,5 +282,24 @@ public class CardRepository {
             cardDao.delete(cards[0]);
             return null;
         }
+    }
+
+    public String saveToFile(Bitmap image, String name, Context context){
+        ContextWrapper cw = new ContextWrapper(context);
+        File directory = cw.getDir("cardImages", Context.MODE_PRIVATE);
+        File myPath = new File(directory, name);
+        FileOutputStream outputStream;
+
+        try {
+            Log.i("DEBUG", "Mypath: "+myPath.getPath());
+            outputStream = new FileOutputStream(myPath);
+            image.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+            outputStream.close();
+        }catch( FileNotFoundException fe){
+            fe.printStackTrace();
+        } catch (IOException ioe){
+            ioe.printStackTrace();
+        }
+        return myPath.getPath();
     }
 }

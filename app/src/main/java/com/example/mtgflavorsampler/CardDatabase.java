@@ -2,8 +2,6 @@ package com.example.mtgflavorsampler;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
-
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
@@ -12,7 +10,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 /**
     This class establishes the database on users device that holds our CardData entities. 
 */
-@Database(entities = {CardData.class}, version = 3)
+@Database(entities = {CardData.class}, version = 5)
 public abstract class CardDatabase extends RoomDatabase {
 
     private static CardDatabase instance;

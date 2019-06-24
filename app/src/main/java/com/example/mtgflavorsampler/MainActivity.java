@@ -1,9 +1,5 @@
 package com.example.mtgflavorsampler;
 
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.fragment.app.FragmentManager;
-
-import android.app.ActionBar;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ScrollView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -38,8 +33,6 @@ public class MainActivity extends AppCompatActivity implements DisplayFragment.O
                     .commit();
             getSupportActionBar().setTitle("MTG Flavor Sampler");
         }
-
-
     }
 
     @Override
@@ -96,6 +89,8 @@ public class MainActivity extends AppCompatActivity implements DisplayFragment.O
     public void onFragmentInteraction(Uri uri) {
 
     }
+
+
 }
 
 

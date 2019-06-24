@@ -123,7 +123,7 @@
             android:layout_marginTop="8dp"
             android:contentDescription="scryfall_website"
             android:onClick="goToWeb"
-            tools:src="@drawable/ic_open_in_web" />
+            tools:src="@drawable/ic_go_to_web" />
 
         <Button
             android:id="@+id/button_flavor"

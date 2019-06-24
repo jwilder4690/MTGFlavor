@@ -3,7 +3,6 @@ package com.example.mtgflavorsampler;
 import android.app.Application;
 import android.graphics.Bitmap;
 import android.util.Log;
-
 import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -31,6 +30,8 @@ public class FlavorViewModel extends AndroidViewModel{
     public Bitmap getCurrentCardArt(){
         return repository.getCurrentCardArt();
     }
+
+    public CardData getCurrentCard(){ return currentCard.getValue(); }
 
     public LiveData<CardData> viewCard(){
         return currentCard;
@@ -60,6 +61,8 @@ public class FlavorViewModel extends AndroidViewModel{
     public void updateRange(int start, int end){
         repository.updateRange(start,end);
     }
+
+    public void update(CardData card){ repository.update(card);}
 
     public void delete(CardData card){
         repository.delete(card);

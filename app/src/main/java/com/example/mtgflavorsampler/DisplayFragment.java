@@ -26,6 +26,7 @@ import android.widget.TextView;
  */
 public class DisplayFragment extends Fragment {
 
+    //I forget what this is. Do I still need it O_o
     static{
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
@@ -96,7 +97,7 @@ public class DisplayFragment extends Fragment {
         mainLayout = v.findViewById(R.id.card_main_layout);
 
         ImageView favoriteButton = v.findViewById(R.id.add_to_favorites);
-        favoriteButton.setImageResource(R.drawable.ic_favorite);
+        favoriteButton.setImageResource(R.drawable.ic_favorite_empty);
 
         ImageView webButton = v.findViewById(R.id.go_to_web);
         webButton.setImageResource(R.drawable.ic_go_to_web);

@@ -11,6 +11,8 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -103,14 +105,10 @@ public class ListFragment extends Fragment implements CardAdapter.OnStartDragLis
 
         adapter.setOnItemClickListener(new CardAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(CardData card) {
-                /*
-                    Updates current card and changes to DisplayFragment in order to view it.
-                 */
-                flavorViewModel.setCurrentCard(card);
+            public void onItemClick(int position) {
                 getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.frame, DisplayFragment.newInstance("a", "b"))
-                        .addToBackStack(card.getName())
+                        .replace(R.id.frame, ListViewerFragment.newInstance(position))
+                        .addToBackStack("hi")
                         .commit();
             }
         });

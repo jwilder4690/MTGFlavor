@@ -7,6 +7,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -51,9 +53,6 @@ public class MainActivity extends AppCompatActivity implements DisplayFragment.O
                         .addToBackStack("faves")
                         .commit();
                 return true;
-            case R.id.add_to_favorites:
-
-                return true;
             case R.id.back_arrow:
                 getSupportFragmentManager().popBackStackImmediate();
                 return true;
@@ -64,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements DisplayFragment.O
 
     public void requestNewCard(View view){
         flavorViewModel.requestNewCard();
+        ImageButton favoriteButton = findViewById(R.id.add_to_favorites);
+        favoriteButton.setImageResource(R.drawable.ic_favorite_empty);
         ScrollView scrollView = findViewById(R.id.scrollView);
         scrollView.smoothScrollTo(0,0);
     }
@@ -72,6 +73,8 @@ public class MainActivity extends AppCompatActivity implements DisplayFragment.O
         boolean added = flavorViewModel.insert();
         if(added) {
             Toast.makeText(MainActivity.this, "Added to favorites", Toast.LENGTH_SHORT).show();
+            ImageButton favoriteButton = view.findViewById(R.id.add_to_favorites);
+            favoriteButton.setImageResource(R.drawable.ic_favorite);
         }
         else{
             Toast.makeText(MainActivity.this, "Duplicate not added", Toast.LENGTH_SHORT).show();

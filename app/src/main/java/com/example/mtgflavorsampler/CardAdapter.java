@@ -91,7 +91,7 @@ public class CardAdapter extends RecyclerView.Adapter <CardAdapter.CardHolder> {
                     //Need to verify that our listener has been initialized and that the position is
                     //valid. Could be invalid during delete animation or other reasons.
                     if(listener != null && position != RecyclerView.NO_POSITION) {
-                        listener.onItemClick(cards.get(position));
+                        listener.onItemClick(position);
                     }
                 }
             });
@@ -99,7 +99,7 @@ public class CardAdapter extends RecyclerView.Adapter <CardAdapter.CardHolder> {
     }
 
     public interface OnItemClickListener{
-        void onItemClick(CardData card);
+        void onItemClick(int position);
     }
 
     public interface OnStartDragListener{

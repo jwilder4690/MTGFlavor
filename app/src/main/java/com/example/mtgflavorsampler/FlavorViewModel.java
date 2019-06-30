@@ -51,7 +51,6 @@ public class FlavorViewModel extends AndroidViewModel{
         List<CardData> cards = repository.getList();
         for(int i = 0; i < cards.size(); i++ ){
             //Checks if card of same name exists in database
-            Log.i("DEBUG", cards.get(i).getName());
             if(cards.get(i).getName().equalsIgnoreCase(currentCard.getValue().getName())) return false;
         }
         repository.insert();

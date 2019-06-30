@@ -13,7 +13,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class Webservice {
-    //private final String SCRYFALL_SEARCH = "https://api.scryfall.com/cards/random?q=ft%3A\"+\"";
     /*
         Url needs to be coded using URL percent encoding for special characters, but may use the fulltext
         search string provided by scryfall.

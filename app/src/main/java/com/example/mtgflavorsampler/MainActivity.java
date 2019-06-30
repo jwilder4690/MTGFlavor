@@ -18,7 +18,7 @@ import androidx.lifecycle.ViewModelProviders;
     Main activity 
 */
 
-public class MainActivity extends AppCompatActivity implements DisplayFragment.OnDisplayFragmentInteractionListener, ListFragment.OnListFragmentInteractionListener{
+public class MainActivity extends AppCompatActivity implements DisplayFragment.OnDisplayFragmentInteractionListener{
     private FlavorViewModel flavorViewModel;
 
     @Override
@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements DisplayFragment.O
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.frame, DisplayFragment.newInstance("a", "b"))
                     .commit();
-            getSupportActionBar().setTitle("MTG Flavor Sampler");
+            getSupportActionBar().setTitle("Tasty MTG");
         }
     }
 
@@ -53,8 +53,11 @@ public class MainActivity extends AppCompatActivity implements DisplayFragment.O
                         .addToBackStack("faves")
                         .commit();
                 return true;
-            case R.id.back_arrow:
-                getSupportFragmentManager().popBackStackImmediate();
+            case R.id.home_button:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.frame, DisplayFragment.newInstance("a", "b"))
+                        .addToBackStack("home")
+                        .commit();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

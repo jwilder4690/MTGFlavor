@@ -25,10 +25,10 @@ public interface CardDao {
     void delete(CardData card);
 
     //can use SQL operations
-    @Query("SELECT * FROM card_table ORDER BY favorite ASC")
+    @Query("SELECT * FROM card_table ORDER BY favorite DESC")
     LiveData<List<CardData>> getAllCards();
     
     //This method returns a list instead of LiveData to allow swapping operations. 
-    @Query("SELECT * FROM card_table ORDER BY favorite ASC")
+    @Query("SELECT * FROM card_table ORDER BY favorite DESC")
     List<CardData> getList();
 }

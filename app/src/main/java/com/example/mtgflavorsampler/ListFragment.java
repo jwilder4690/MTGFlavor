@@ -1,7 +1,5 @@
 package com.example.mtgflavorsampler;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,34 +9,21 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.List;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link OnListFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ListFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ListFragment extends Fragment implements CardAdapter.OnStartDragListener {
 
     private FlavorViewModel flavorViewModel;
     private ItemTouchHelper itemTouchHelper;
     RecyclerView recyclerView;
-    Button backButton;
+    //Button backButton;
 
-
-    private OnListFragmentInteractionListener mListener;
 
     public ListFragment() {
         // Required empty public constructor
@@ -68,7 +53,6 @@ public class ListFragment extends Fragment implements CardAdapter.OnStartDragLis
 
         //Establish view data members used for this screen
         recyclerView = v.findViewById(R.id.recycler_view);
-        backButton = v.findViewById(R.id.back_arrow);
 
         return v;
     }
@@ -158,12 +142,10 @@ public class ListFragment extends Fragment implements CardAdapter.OnStartDragLis
         public void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
             super.onSelectedChanged(viewHolder, actionState);
             if(actionState == ItemTouchHelper.ACTION_STATE_DRAG){
-                Toast.makeText(getActivity(), "Started Dragging", Toast.LENGTH_SHORT).show();
                 initialPosition = viewHolder.getAdapterPosition();
                 dragging = true;
             }
             if(actionState == ItemTouchHelper.ACTION_STATE_IDLE){
-                Toast.makeText(getActivity(), "Now Idle", Toast.LENGTH_SHORT).show();
                 if(dragging){
                     flavorViewModel.updateRange(initialPosition, currentPosition);
                     dragging = false;
@@ -183,58 +165,4 @@ public class ListFragment extends Fragment implements CardAdapter.OnStartDragLis
         }
     }
 
-
-
-    /*
-        All below methods were created automatically with the blank fragment template. Some may be
-        useful later, but leaving them alone for now.
-     */
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-//        }
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnDisplayFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
 }

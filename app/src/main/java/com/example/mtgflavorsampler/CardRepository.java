@@ -41,6 +41,8 @@ public class CardRepository {
         allCards = cardDao.getAllCards();
         currentCard.setValue(new CardData());
         context = application.getApplicationContext();
+        currentArtCrop = BitmapFactory.decodeResource(application.getResources(), R.drawable.omniscience);
+        currentCardArt = BitmapFactory.decodeResource(application.getResources(), R.drawable.omniscience_card);
         fetchList();
         fetchCard();
     }
@@ -48,7 +50,7 @@ public class CardRepository {
     public void insert(){
         CardData newInsert = currentCard.getValue();
         //Starting favorite set to one more than last Card in list. TODO: change to start at top of list. 
-        if(currentList.size() > 0) newInsert.setFavorite(currentList.get(currentList.size()-1).getFavorite()+1);
+        if(currentList.size() > 0) newInsert.setFavorite(currentList.get(0).getFavorite()+1);
         new InsertCardAsyncTask(cardDao).execute(newInsert);
         fetchList();
     }

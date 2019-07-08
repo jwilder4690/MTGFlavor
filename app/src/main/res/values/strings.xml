@@ -7,4 +7,8 @@
     <string name="next_button">More flavor!</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="list_title">My Favorites</string>
+    <string name="card_name">CardName</string>
+    <string name="handleDescription">Grab handle to reorder item.</string>
+    <string name="go_to_scryfall">Open current card on scryfall website.</string>
+    <string name="add_to_favorites">Add current card to list of favorites.</string>
 </resources>

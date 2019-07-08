@@ -21,28 +21,27 @@
             android:id="@+id/text_view_cardName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toStartOf="@id/drag_handle"
-            android:layout_toLeftOf="@id/drag_handle"
-            android:text="Card Name"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:maxLines="1"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
+            android:layout_toStartOf="@id/drag_handle"
+            android:layout_toLeftOf="@id/drag_handle"
             android:ellipsize="end"
-            />
+            android:maxLines="1"
+            android:text="@string/card_name"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
         <TextView
             android:id="@+id/text_view_flavorText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toStartOf="@id/drag_handle"
-            android:layout_toLeftOf="@id/drag_handle"
+            android:layout_below="@id/text_view_cardName"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
-            android:layout_below="@id/text_view_cardName"
-            android:text="This is the flavor text for this card."
+            android:layout_toStartOf="@id/drag_handle"
+            android:layout_toLeftOf="@id/drag_handle"
+            android:ellipsize="end"
             android:maxLines="1"
-            android:ellipsize="end"/>
+            android:text="@string/default_text" />
 
         <ImageView
             android:id="@+id/drag_handle"
@@ -51,6 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
+            android:contentDescription="@string/handleDescription"
             app:srcCompat="@drawable/ic_drag_handle" />
 
 

@@ -3,12 +3,14 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.justindwilder.tastymtg"
+        applicationId 'com.justindwilder.tastymtg'
         minSdkVersion 15
         targetSdkVersion 28
         versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        versionName '1.0'
+        //testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        testInstrumentationRunnerArguments clearPackageData: 'true'
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
@@ -17,12 +19,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    testOptions{
+        execution 'ANDROIDX_TEST_ORCHESTRATOR'
+    }
 }
 
 dependencies {
-    def lifecycle_version = "2.0.0"
-    def room_version = "2.1.0-alpha07"
-    def card_version = "1.0.0"
+    def lifecycle_version = '2.0.0'
+    def room_version = '2.1.0-alpha07'
+    def card_version = '1.0.0'
 
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -30,8 +35,12 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:1.1.2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0-beta01'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+//    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+//    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'androidx.test:runner:1.1.0'
+    androidTestUtil 'androidx.test:orchestrator:1.1.0'
+    //androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+
 
     //Lifecycle
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"

@@ -4,24 +4,25 @@ package com.justindwilder.tastymtg;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ *  Fragment for displaying all relevant info and art from a cardData object. Unfortunately fragments
+ *  do not easily allow for complex objects as arguments, so the factory method (newInstance) was used
+ *  to bundle all of the string information from the cardData as arguments to the fragment.
+ *
+ *  This fragment was kept generic so that it can be used both on the main screen as an inner fragment
+ *  as well as the fragment used by the pager for viewing the favorites list.
  */
 public class DisplayFavoriteFragment extends Fragment {
     private static final String ARG_NAME = "name";
@@ -39,7 +40,16 @@ public class DisplayFavoriteFragment extends Fragment {
     private int color;
 
 
-
+    /**
+     * Takes information from CardData and bundles it into arguments for the fragment.
+     * @param name
+     * @param artist
+     * @param flavorText
+     * @param artCropPath
+     * @param cardArtPath
+     * @param color
+     * @return Fragment with 6 arguments.
+     */
     public static DisplayFavoriteFragment newInstance(String name, String artist, String flavorText, String artCropPath, String cardArtPath, int color){
         DisplayFavoriteFragment fragment = new DisplayFavoriteFragment();
         Bundle args = new Bundle();
@@ -62,27 +72,30 @@ public class DisplayFavoriteFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_display_favorite, container, false);
+
+        /*
+            Grab reference to the views in this fragment in order to update them.
+         */
         TextView nameView = v.findViewById(R.id.text_view_card_name);
         TextView flavorView = v.findViewById(R.id.text_view_flavor);
         TextView artistView = v.findViewById(R.id.text_view_artist);
         ImageView artCropView = v.findViewById(R.id.image_view_art_crop);
         ImageView cardArtView = v.findViewById(R.id.image_view_card_art);
         ScrollView scrollView = v.findViewById(R.id.scrollView);
-        ConstraintLayout mainLayout = v.findViewById(R.id.display_main_layout);
 
+        /*
+            Extracts information from arguments.
+         */
         if(getArguments() != null){
-            cardName = getArguments().getString(ARG_NAME);
-            artist = getArguments().getString(ARG_ARTIST);
-            flavorText = getArguments().getString(ARG_FLAVOR);
-            cardArtPath = getArguments().getString(ARG_CA_PATH);
-            artCropPath = getArguments().getString(ARG_AC_PATH);
-            color = getArguments().getInt(ARG_COLOR);
+            parseArguments();
         }
 
+        /*
+            Updates the views with newly parsed information.
+         */
         nameView.setText(cardName);
         flavorView.setText(flavorText);
         artistView.setText(artist);
-
         try{
             File artPath = new File(artCropPath);
             Bitmap art =  BitmapFactory.decodeStream(new FileInputStream(artPath));
@@ -99,6 +112,13 @@ public class DisplayFavoriteFragment extends Fragment {
         return v;
     }
 
-
+    private void parseArguments(){
+        cardName = getArguments().getString(ARG_NAME);
+        artist = getArguments().getString(ARG_ARTIST);
+        flavorText = getArguments().getString(ARG_FLAVOR);
+        cardArtPath = getArguments().getString(ARG_CA_PATH);
+        artCropPath = getArguments().getString(ARG_AC_PATH);
+        color = getArguments().getInt(ARG_COLOR);
+    }
 
 }

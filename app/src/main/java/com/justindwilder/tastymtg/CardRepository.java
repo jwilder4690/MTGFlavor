@@ -6,7 +6,6 @@ import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.util.Log;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -49,15 +48,17 @@ public class CardRepository {
 
     public void insert(){
         CardData newInsert = currentCard.getValue();
-        //Starting favorite set to one more than last Card in list. TODO: change to start at top of list. 
+        //Adds favorite to top of list
         if(currentList.size() > 0) newInsert.setFavorite(currentList.get(0).getFavorite()+1);
         new InsertCardAsyncTask(cardDao).execute(newInsert);
         fetchList();
     }
 
     /**
-        Updates the 
-    */
+     * Updates all cards from first to last
+     * @param first
+     * @param last
+     */
     public void updateRange(int first, int last){
         int start;
         int end;
@@ -74,17 +75,20 @@ public class CardRepository {
         }
     }
 
+    /**
+     * Swaps two cards by trading their 'favorite' value, which is what the list is sorted by.
+     * FetchList() is called to ensure the repository's currentList is accurate.
+     * @param start
+     * @param end
+     */
     public void swap(int start, int end){
         int startId = allCards.getValue().get(start).getFavorite();
         int endId =  allCards.getValue().get(end).getFavorite();
         allCards.getValue().get(end).setFavorite(startId);
-        //update(allCards.getValue().get(end));
         allCards.getValue().get(start).setFavorite(endId);
-        //update(allCards.getValue().get(start));
         fetchList();
     }
 
-    //Keep, may be used to update priority
     public void update(CardData card){
         new UpdateCardAsyncTask(cardDao).execute(card);
     }
@@ -128,14 +132,16 @@ public class CardRepository {
     }
 
     public MutableLiveData<CardData> getCurrentCard(){
-        //TODO: figure out what to do if null, as AsyncTask may not be complete yet.
-        // Need to use temp until new card is fetched
         if(currentCard == null){
             fetchCard();
         }
         return currentCard;
     }
 
+    /**
+     * Updates currentCard to card arg and grabs art information from card.
+     * @param card
+     */
     public void displayCard(CardData card){
         setCurrentCard(card);
         try{
@@ -154,26 +160,17 @@ public class CardRepository {
         currentCard.setValue(card);
     }
 
-    /*
-        TODO: OnCreate, Fetch a card from the web and make it your current card.
-        TODO: On request (button) Fetch a new card from the web and replace current card.
-        Possibly insert will be used to add current card to database.
-     */
-
     public void fetchCard(){
         // This will fetch a new card from the web and update current card.
-        //TODO: remove boolean argument
-
         new FetchCardAsyncTask(this, context).execute();
     }
 
-    /*
+    /**
         This class handles accessing information from the web.
 
-        If the fromWeb arg is true, the task will pull a new card from the web service.
-        if the fromWeb arg is false, the task will use provided card.
+        The images are pulled from the card information and saved to device memory.
 
-        The images are pulled from the card information and stored in the repository.
+        After executing, the current card as well as the art images are updated.
      */
     private static class FetchCardAsyncTask extends AsyncTask<CardData, Void, CardData>{
         private CardRepository repository;
@@ -201,7 +198,7 @@ public class CardRepository {
                 repository.setCardArt(art);
             }
             catch (MalformedURLException e){
-                Log.e("ERROR", "Bad URL from API.");
+
             }
             catch (Exception e){
 
@@ -246,10 +243,6 @@ public class CardRepository {
         @Override
         protected void onPostExecute(List<CardData> result){
             this.repository.setList(result);
-            for (CardData card: result) {
-                Log.i("DEBUG", "ID: "+card.getId() +" "+ card.getName()+" Path: "+card.getArtCropPath());
-            }
-
         }
     }
 
@@ -264,11 +257,6 @@ public class CardRepository {
         protected CardData doInBackground(CardData ... cards){
             cardDao.update(cards[0]);
             return cards[0];
-        }
-
-        @Override
-        protected void onPostExecute(CardData result){
-            //Log.i("DEBUG", result.toString());
         }
     }
 
@@ -286,6 +274,14 @@ public class CardRepository {
         }
     }
 
+    /**
+     * This method accepts a Bitmap, name (file safe), and the application context and stores the
+     * images as a PNG in a directory named "cardImages".
+     * @param image Bitmap to be saved
+     * @param name File safe string to name file
+     * @param context Applications context
+     * @return Path to newly created file (to be stored in database)
+     */
     public String saveToFile(Bitmap image, String name, Context context){
         ContextWrapper cw = new ContextWrapper(context);
         File directory = cw.getDir("cardImages", Context.MODE_PRIVATE);
@@ -293,7 +289,6 @@ public class CardRepository {
         FileOutputStream outputStream;
 
         try {
-            Log.i("DEBUG", "Mypath: "+myPath.getPath());
             outputStream = new FileOutputStream(myPath);
             image.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
             outputStream.close();

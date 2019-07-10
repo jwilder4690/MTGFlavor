@@ -1,11 +1,8 @@
 package com.justindwilder.tastymtg;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
@@ -57,7 +54,6 @@ public class CardData {
             if (colors.length() > 1) color = R.color.Gold;
             else if (colors.length() == 0) color = R.color.Brown;
             else {
-                Log.i("DEBUG", "My color is: " + colors.getString(0));
                 switch (colors.getString(0)) {
                     case "W":
                         color = R.color.W;
@@ -80,7 +76,7 @@ public class CardData {
             }
         }
         catch (JSONException j) {
-            Log.e("Exception", j.toString());
+            //Toast here?
         }
     }
 

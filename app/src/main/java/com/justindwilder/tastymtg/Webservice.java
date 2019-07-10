@@ -5,6 +5,11 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/**
+ * Class for handling web interactions. This class should never be called from the main UI thread as
+ * web operations are not instantaneous and will cause lag in application. Current usage is from within
+ * asynchronous tasks inside the repository.
+ */
 public class Webservice {
     /*
         Url needs to be coded using URL percent encoding for special characters, but may use the fulltext
@@ -15,7 +20,12 @@ public class Webservice {
     public Webservice() {
     }
 
-    //Does this need to be the AsyncTask or can I just call it from an AsyncTask?
+    /**
+     * Method creates a url connection to the scryfall database. The search string is a query for a
+     * random card with a flavor text containing the regex for any character. This should cover all
+     * MTG cards which have a flavor text.
+     * @return CardData created from the JSON information fetched from Scryfall.
+     */
     public CardData loadCard(){
         try {
             URL url = new URL(SCRYFALL_SEARCH);

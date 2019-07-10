@@ -88,8 +88,8 @@ public class CardAdapter extends RecyclerView.Adapter <CardAdapter.CardHolder> {
                 public void onClick(View v) {
                     int position = getAdapterPosition();
 
-                    //Need to verify that our listener has been initialized and that the position is
-                    //valid. Could be invalid during delete animation or other reasons.
+                    //Needed to verify that our listener has been initialized and that the position
+                    //is valid. Could be invalid during delete animation or other reasons.
                     if(listener != null && position != RecyclerView.NO_POSITION) {
                         listener.onItemClick(position);
                     }

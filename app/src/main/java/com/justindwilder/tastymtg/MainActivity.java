@@ -14,10 +14,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
 /**
-    Main activity 
-*/
-
-public class MainActivity extends AppCompatActivity implements DisplayFragment.OnDisplayFragmentInteractionListener{
+ * This is the main activity and starting point for this application. This application was designed
+ * with the single activity, multiple fragments architecture. This allows the fragments to share the
+ * same single ViewModel, having consistent data across all views and pages within the app.
+ *
+ * The layout consists of a frame which holds the fragment for the current page of navigation.
+ */
+public class MainActivity extends AppCompatActivity{
     private FlavorViewModel flavorViewModel;
 
     @Override
@@ -27,15 +30,19 @@ public class MainActivity extends AppCompatActivity implements DisplayFragment.O
 
         flavorViewModel = ViewModelProviders.of(this).get(FlavorViewModel.class);
 
-
         if(savedInstanceState == null) {  //if null this is first time creation
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.frame, DisplayFragment.newInstance("a", "b"))
+                    .add(R.id.frame, new DisplayFragment())
                     .commit();
             getSupportActionBar().setTitle("Tasty MTG");
         }
     }
 
+    /**
+     * Method creates the toolbar navigation layout.
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater menuInflater = getMenuInflater();
@@ -43,18 +50,23 @@ public class MainActivity extends AppCompatActivity implements DisplayFragment.O
         return true;
     }
 
+    /**
+     * Method handles the button presses that originate from the options bar.
+     * @param item Menu icon which was pressed.
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
             case R.id.list_favorites:
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.frame, ListFragment.newInstance("a", "b"))
+                        .replace(R.id.frame, new ListFragment())
                         .addToBackStack("faves")
                         .commit();
                 return true;
             case R.id.home_button:
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.frame, DisplayFragment.newInstance("a", "b"))
+                        .replace(R.id.frame, new DisplayFragment())
                         .addToBackStack("home")
                         .commit();
                 return true;
@@ -63,6 +75,11 @@ public class MainActivity extends AppCompatActivity implements DisplayFragment.O
         }
     }
 
+    /**
+     * Method for requesting new card. This method submits the request to the viewModel, as well as
+     * resets the scrollView and the favorite button icon.
+     * @param view
+     */
     public void requestNewCard(View view){
         flavorViewModel.requestNewCard();
         ImageButton favoriteButton = findViewById(R.id.add_to_favorites);
@@ -71,6 +88,13 @@ public class MainActivity extends AppCompatActivity implements DisplayFragment.O
         scrollView.smoothScrollTo(0,0);
     }
 
+    /**
+     * Method for adding a card to favorites. If insertion is successful, icon in favorite button is
+     * updated to filled heart. Toast message will pop up and tell the user if successful or not.
+     * Insertion will only fall if card name is same as card in current favorites list, per logic in
+     * repository.
+     * @param view
+     */
     public void addToFavorites(View view){
         boolean added = flavorViewModel.insert();
         if(added) {
@@ -83,19 +107,16 @@ public class MainActivity extends AppCompatActivity implements DisplayFragment.O
         }
     }
 
+    /**
+     * Method starts intent to go to the Scryfall webpage for this card.
+     * @param view
+     */
     public void goToWeb(View view){
         CardData myCard = flavorViewModel.viewCard().getValue();
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(myCard.getWebUrl()));
         startActivity(browserIntent);
         Toast.makeText(MainActivity.this, "Going to Scryfall", Toast.LENGTH_SHORT).show();
     }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
-
-
 }
 
 

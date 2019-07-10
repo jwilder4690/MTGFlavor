@@ -1,8 +1,6 @@
 package com.justindwilder.tastymtg;
 
 import android.app.Application;
-import android.graphics.Bitmap;
-import android.util.Log;
 import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -20,19 +18,13 @@ public class FlavorViewModel extends AndroidViewModel{
         repository = new CardRepository(application);
         favoriteCards = repository.getAllCards();
         currentCard = repository.getCurrentCard();
-        Log.i("DEBUG", "FlavorViewModel constructed.");
     }
 
-    public Bitmap getCurrentArtCrop(){
-        return repository.getCurrentArtCrop();
-    }
-
-    public Bitmap getCurrentCardArt(){
-        return repository.getCurrentCardArt();
-    }
-
-    public CardData getCurrentCard(){ return currentCard.getValue(); }
-
+    /**
+     * Tracks current card.
+     * @return This method returns LiveData, so changes to the current card in the repository will be
+     * visible and observable here.
+     */
     public LiveData<CardData> viewCard(){
         return currentCard;
     }
@@ -41,16 +33,15 @@ public class FlavorViewModel extends AndroidViewModel{
         repository.fetchCard();
     }
 
-    public void setCurrentCard(CardData card){
-        repository.displayCard(card);
-        //currentCard = repository.getCurrentCard();
-    }
-
-    //List Operations
+    /**
+     * Method attempts to insert currentCard into database. First checks if card is already a favorite,
+     * and if so it ignores insertion to prevent duplicates.
+     * @return boolean signifies if insert was successful or not
+     */
     public boolean insert(){
         List<CardData> cards = repository.getList();
         for(int i = 0; i < cards.size(); i++ ){
-            //Checks if card of same name exists in database
+            //Checks if card of same name exists in database (may need to use ID other than name)
             if(cards.get(i).getName().equalsIgnoreCase(currentCard.getValue().getName())) return false;
         }
         repository.insert();
@@ -60,8 +51,6 @@ public class FlavorViewModel extends AndroidViewModel{
     public void updateRange(int start, int end){
         repository.updateRange(start,end);
     }
-
-    public void update(CardData card){ repository.update(card);}
 
     public void delete(CardData card){
         repository.delete(card);

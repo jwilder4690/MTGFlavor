@@ -13,36 +13,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import java.util.List;
 
-
+/**
+ * Fragment displays all saved cards in list as a vertical recycler view. Each item can be reordered
+ * by dragging and deleted by swiping with the help of the item touch helpers.
+ */
 public class ListFragment extends Fragment implements CardAdapter.OnStartDragListener {
 
     private FlavorViewModel flavorViewModel;
     private ItemTouchHelper itemTouchHelper;
     RecyclerView recyclerView;
-    //Button backButton;
-
 
     public ListFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ListFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ListFragment newInstance(String param1, String param2) {
-        ListFragment fragment = new ListFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
@@ -103,7 +87,11 @@ public class ListFragment extends Fragment implements CardAdapter.OnStartDragLis
         itemTouchHelper.startDrag(viewHolder);
     }
 
-
+    /**
+     * Custom callback for ItemTouch. This is needed for handling the drag to reorder functionality.
+     * Added on functionality to update background data when a recyclerviewer swap was made, so that
+     * data and changes were maintained after app close or refresh.
+     */
     public class ItemTouchCallback extends ItemTouchHelper.Callback {
         private CardAdapter adapter;
 

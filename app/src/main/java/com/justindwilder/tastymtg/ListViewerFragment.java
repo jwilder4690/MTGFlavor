@@ -2,24 +2,23 @@ package com.justindwilder.tastymtg;
 
 
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import java.util.List;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * Fragment is the UI shell for the pager class. Holds "My Favorites" title with arrows as hint for
+ * swipe navigation. This fragment should be created with the newInstance() with the integer argument
+ * for the desired starting position of the pager. The default constructor would start from position
+ * 0, but should not cause any errors.
  */
 public class ListViewerFragment extends Fragment {
     private static final String ARG_POSITION = "position";
@@ -32,6 +31,11 @@ public class ListViewerFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * Factory method for creating an instance of this fragment.
+     * @param position Integer that tells the pager which page to start from.
+     * @return
+     */
     public static ListViewerFragment newInstance(int position) {
         ListViewerFragment fragment = new ListViewerFragment();
         Bundle args = new Bundle();
@@ -39,8 +43,6 @@ public class ListViewerFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,8 +53,6 @@ public class ListViewerFragment extends Fragment {
         if(getArguments() != null){
             position = getArguments().getInt(ARG_POSITION);
         }
-
-
         return view;
     }
 
@@ -61,17 +61,14 @@ public class ListViewerFragment extends Fragment {
         collectionPagerAdapter = new CollectionPagerAdapter(getChildFragmentManager());
         viewPager = view.findViewById(R.id.pager);
         viewPager.setAdapter(collectionPagerAdapter);
-        Log.i("DEBUG", "Position: "+position);
 
-        //View pager initialization is not instantaneous, so settingItem must be done in runnable to wait
+        //View pager initialization is not instantaneous, so setting Item must be done in runnable to wait
         viewPager.post(new Runnable() {
             @Override
             public void run() {
                 viewPager.setCurrentItem(position);
             }
         });
-
-        Log.i("DEBUG", "I am here tho: " +viewPager.getCurrentItem());
     }
 
     @Override

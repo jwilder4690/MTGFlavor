@@ -28,18 +28,19 @@
         app:layout_constraintTop_toBottomOf="@id/text_view_activity_title" />
 
 
-
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/buttons_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="275dp">
 
         <ImageButton
             android:id="@+id/go_to_web"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
@@ -49,18 +50,20 @@
 
         <Button
             android:id="@+id/button_flavor"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:maxLines="2"
+            android:minLines="2"
             android:onClick="requestNewCard"
-            android:text="@string/next_button"
-            android:layout_marginRight="100dp"
-            android:layout_marginLeft="100dp"
-            android:layout_weight="1"/>
+            android:text="@string/next_button" />
 
         <ImageButton
             android:id="@+id/add_to_favorites"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
@@ -70,7 +73,7 @@
             tools:src="@drawable/ic_favorite_empty" />
 
 
-    </LinearLayout>
+    </RelativeLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

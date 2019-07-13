@@ -4,11 +4,10 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId 'com.justindwilder.tastymtg'
-        minSdkVersion 15
+        minSdkVersion 14
         targetSdkVersion 28
         versionCode 1
         versionName '1.0'
-        //testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         testInstrumentationRunnerArguments clearPackageData: 'true'
         vectorDrawables.useSupportLibrary = true
@@ -29,27 +28,19 @@ dependencies {
     def room_version = '2.1.0-alpha07'
     def card_version = '1.0.0'
 
-
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.0.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.2'
+    api 'androidx.constraintlayout:constraintlayout:1.1.2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0-beta01'
     testImplementation 'junit:junit:4.12'
-//    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-//    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     androidTestImplementation 'androidx.test:runner:1.1.0'
     androidTestUtil 'androidx.test:orchestrator:1.1.0'
-    //androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
-
 
     //Lifecycle
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     //Optional - Test helpers for liveData
     testImplementation "androidx.arch.core:core-testing:$lifecycle_version"
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
-
-    //Retrofit webservice API
-    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
 
     //Room
     implementation "androidx.room:room-runtime:$room_version"
@@ -58,4 +49,6 @@ dependencies {
     //Design and CardView
     implementation 'com.google.android.material:material:1.0.0-rc01'
     implementation "androidx.cardview:cardview:$card_version"
+
+
 }

@@ -10,7 +10,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 /**
     This class establishes the database on users device that holds our CardData entities. 
 */
-@Database(entities = {CardData.class}, version = 5)
+@Database(entities = {CardData.class}, version = 5, exportSchema = false)
 public abstract class CardDatabase extends RoomDatabase {
 
     private static CardDatabase instance;

@@ -38,11 +38,12 @@ public class Webservice {
                     stringBuilder.append(line).append("\n");
                 }
                 br.close();
-                return new CardData(stringBuilder.toString());
-            } finally {
                 urlConnection.disconnect();
+                return new CardData(stringBuilder.toString());
+            } catch (Exception e){
+
             }
-        } catch (Exception e) {
+        }catch (Exception e) {
         }
         return new CardData();
     }

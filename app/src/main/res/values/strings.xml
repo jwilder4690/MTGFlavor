@@ -2,13 +2,12 @@
     <string name="app_name">Tasty MTG</string>
     <string name="title">Flavor Text of the Day</string>
     <string name="default_text">“The things I once imagined would be my greatest achievements were only the first steps toward a future I can only begin to fathom.” —Jace Beleren</string>
-    <string name="cardInfo2">Card Image</string>
     <string name="cardInfo1">Card Art</string>
     <string name="next_button">More flavor!</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="list_title">My Favorites</string>
     <string name="card_name">CardName</string>
     <string name="handleDescription">Grab handle to reorder item.</string>
     <string name="go_to_scryfall">Open current card on scryfall website.</string>
     <string name="add_to_favorites">Add current card to list of favorites.</string>
+    <string name="home">Home</string>
 </resources>

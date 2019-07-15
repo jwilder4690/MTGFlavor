@@ -32,7 +32,7 @@ public class CardRepository {
     private MutableLiveData<CardData> currentCard = new MutableLiveData<>();
     public Bitmap currentArtCrop;
     public Bitmap currentCardArt;
-    Context context;
+    public Context context;
 
     public CardRepository(Application application){
         CardDatabase database = CardDatabase.getInstance(application);
@@ -144,15 +144,24 @@ public class CardRepository {
      */
     public void displayCard(CardData card){
         setCurrentCard(card);
+        FileInputStream fileInputStream;
         try{
             File artPath = new File(card.getArtCropPath());
-            Bitmap art =  BitmapFactory.decodeStream(new FileInputStream(artPath));
+            fileInputStream = new FileInputStream(artPath);
+            Bitmap art =  BitmapFactory.decodeStream(fileInputStream);
             setArtCrop(art);
+            fileInputStream.close();
+
             artPath = new File(card.getCardArtPath());
-            art = BitmapFactory.decodeStream(new FileInputStream(artPath));
+            fileInputStream = new FileInputStream(artPath);
+            art = BitmapFactory.decodeStream(fileInputStream);
             setCardArt(art);
+            fileInputStream.close();
         } catch (FileNotFoundException e){
             e.printStackTrace();
+        }
+        catch (IOException ie){
+
         }
     }
 
@@ -175,13 +184,11 @@ public class CardRepository {
     private static class FetchCardAsyncTask extends AsyncTask<CardData, Void, CardData>{
         private CardRepository repository;
         private Webservice webservice;
-        private Context context;
 
 
         private  FetchCardAsyncTask(CardRepository repository, Context context){
             webservice = new Webservice();
             this.repository = repository;
-            this.context = context;
         }
 
         @Override
@@ -190,12 +197,14 @@ public class CardRepository {
             try{
                 InputStream in = (InputStream) new URL(loadedCard.getArtCropUrl()).getContent();
                 Bitmap art = BitmapFactory.decodeStream(in);
-                loadedCard.setArtCropPath(repository.saveToFile(art, loadedCard.getSafeName()+"_ArtCrop.png", context));
+                loadedCard.setArtCropPath(repository.saveToFile(art, loadedCard.getSafeName()+"_ArtCrop.png", repository.context));
                 repository.setArtCrop(art);
+                in.close();
                 in = (InputStream) new URL(loadedCard.getCardArtUrl()).getContent();
                 art = BitmapFactory.decodeStream(in);;
-                loadedCard.setCardArtPath(repository.saveToFile(art, loadedCard.getSafeName()+"_CardArt.png", context));
+                loadedCard.setCardArtPath(repository.saveToFile(art, loadedCard.getSafeName()+"_CardArt.png", repository.context));
                 repository.setCardArt(art);
+                in.close();
             }
             catch (MalformedURLException e){
 

@@ -15,8 +15,8 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolBar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/abc_action_bar_default_height_material"
-        app:navigationIcon="?attr/homeAsUpIndicator"></androidx.appcompat.widget.Toolbar>
+        android:layout_height="?attr/actionBarSize"
+        app:navigationIcon="?attr/homeAsUpIndicator"/>
 
 
 

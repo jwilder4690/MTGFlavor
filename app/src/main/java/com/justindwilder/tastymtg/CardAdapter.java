@@ -1,5 +1,6 @@
 package com.justindwilder.tastymtg;
 
+import android.annotation.SuppressLint;
 import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Ignore;
 
 public class CardAdapter extends RecyclerView.Adapter <CardAdapter.CardHolder> {
     private List<CardData> cards = new ArrayList<>();
@@ -89,7 +91,7 @@ public class CardAdapter extends RecyclerView.Adapter <CardAdapter.CardHolder> {
                     int position = getAdapterPosition();
 
                     //Needed to verify that our listener has been initialized and that the position
-                    //is valid. Could be invalid during delete animation or other reasons.
+                    //is 000valid. Could be invalid during delete animation or other reasons.
                     if(listener != null && position != RecyclerView.NO_POSITION) {
                         listener.onItemClick(position);
                     }

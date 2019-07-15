@@ -12,7 +12,7 @@
     <RelativeLayout
         android:id="@+id/card_item"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:padding="8dp"
         android:background="@color/white">
 
@@ -22,9 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
             android:layout_toStartOf="@id/drag_handle"
-            android:layout_toLeftOf="@id/drag_handle"
             android:ellipsize="end"
             android:maxLines="1"
             android:text="@string/card_name"
@@ -36,9 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/text_view_cardName"
             android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
             android:layout_toStartOf="@id/drag_handle"
-            android:layout_toLeftOf="@id/drag_handle"
             android:ellipsize="end"
             android:maxLines="1"
             android:text="@string/default_text" />
@@ -49,7 +45,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             android:contentDescription="@string/handleDescription"
             app:srcCompat="@drawable/ic_drag_handle" />
 

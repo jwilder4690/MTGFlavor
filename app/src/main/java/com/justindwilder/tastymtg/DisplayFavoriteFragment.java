@@ -14,6 +14,7 @@ import android.widget.TextView;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 
 /**
@@ -98,15 +99,22 @@ public class DisplayFavoriteFragment extends Fragment {
         artistView.setText(artist);
         try{
             File artPath = new File(artCropPath);
-            Bitmap art =  BitmapFactory.decodeStream(new FileInputStream(artPath));
+            FileInputStream fileInputStream = new FileInputStream(artPath);
+            Bitmap art =  BitmapFactory.decodeStream(fileInputStream);
             artCropView.setImageBitmap(art);
+            fileInputStream.close();
+
             artPath = new File(cardArtPath);
-            art = BitmapFactory.decodeStream(new FileInputStream(artPath));
+            fileInputStream = new FileInputStream(artPath);
+            art = BitmapFactory.decodeStream(fileInputStream);
             cardArtView.setImageBitmap(art);
+            fileInputStream.close();
         } catch (FileNotFoundException e){
             e.printStackTrace();
         } catch (NullPointerException n){
             //Don't replace image
+        } catch (IOException i){
+
         }
         scrollView.setBackgroundColor(getResources().getColor(color));
         return v;

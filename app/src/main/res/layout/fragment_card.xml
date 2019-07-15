@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:id="@+id/card_main_layout"
-    android:background="@color/U">
+    android:id="@+id/card_main_layout">
 
 
     <TextView
@@ -40,9 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
             android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
             android:layout_marginTop="8dp"
             android:contentDescription="@string/go_to_scryfall"
             android:onClick="goToWeb"
@@ -63,10 +60,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
             android:contentDescription="@string/add_to_favorites"
             android:cropToPadding="false"
             android:onClick="addToFavorites"

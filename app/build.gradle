@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId 'com.justindwilder.tastymtg'
-        minSdkVersion 14
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
         versionName '1.0'
@@ -25,16 +25,16 @@ android {
 
 dependencies {
     def lifecycle_version = '2.0.0'
-    def room_version = '2.1.0-alpha07'
+    def room_version = '2.1.0'
     def card_version = '1.0.0'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.0.0'
-    api 'androidx.constraintlayout:constraintlayout:1.1.2'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0-beta01'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    api 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.0'
-    androidTestUtil 'androidx.test:orchestrator:1.1.0'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestUtil 'androidx.test:orchestrator:1.2.0'
 
     //Lifecycle
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
@@ -47,7 +47,7 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:$room_version"
 
     //Design and CardView
-    implementation 'com.google.android.material:material:1.0.0-rc01'
+    implementation 'com.google.android.material:material:1.1.0-alpha07'
     implementation "androidx.cardview:cardview:$card_version"
 
 
